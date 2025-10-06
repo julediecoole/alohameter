@@ -1,7 +1,7 @@
 <?php
 $data = [
     "firstname" => "Melina",
-    "lastname" => "Gast"
+    "lastname" => "Gast",
     "email" => "melina.gast@stud.fhgr.ch"
 ];
 
@@ -19,13 +19,13 @@ try {
     $stmt = $pdo->prepare($sql);
 
     // Fügt jedes Element im Array in die Datenbank ein
-    foreach ($dataArray as $item) {
+    
         $stmt->execute([
-            $item["firstname"],
-            $item["lastname"],
-            $item["email"]
+            $data["firstname"],
+            $data["lastname"],
+            $data["email"]
         ]);
-    }
+    
 
     echo "Daten erfolgreich eingefügt.";
 } catch (PDOException $e) {
