@@ -22,8 +22,8 @@ function fetchBuoyData($url) {
     curl_close ($ch);
     print_r($response);
 }
-    return fetchBuoyData("https://surftruths.com/api/buoys/51001/readings.json"); //oahu
-    return fetchBuoyData(""); //kauai
-    return fetchBuoyData(""); //maui
-    return fetchBuoyData(""); //big island
+    return fetchBuoyData("https://surftruths.com/api/buoys/51000/readings.json"); //oahu
+    return fetchBuoyData("https://surftruths.com/api/buoys/51001/readings.json"); //kauai
+    return fetchBuoyData("https://surftruths.com/api/buoys/51002/readings.json"); //maui
+    return fetchBuoyData("https://surftruths.com/api/buoys/51004/readings.json"); //big island
    
