@@ -1,29 +1,77 @@
 <?php
+// =============================
 // extract.php
+// =============================
 
-/* ============================================================================
-   HANDLUNGSANWEISUNG (extract.php)
-   1) Lade Konfiguration/Constants (API-URL, Parameter, ggf. Zeitzone).
-   2) Baue die Request-URL (Query-Params sauber via http_build_query).
-   3) Initialisiere cURL (curl_init) mit der Ziel-URL.
-   4) Setze cURL-Optionen (RETURNTRANSFER, TIMEOUT, HTTP-Header, FOLLOWLOCATION).
-   5) Führe Request aus (curl_exec) und prüfe Transportfehler (curl_error).
-   6) Prüfe HTTP-Status & Content-Type (JSON erwartet), sonst früh abbrechen.
-   7) Dekodiere JSON robust (json_decode(..., true)).
-   8) Normalisiere/prüfe Felder (defensive Defaults, Typen casten).
-   9) Gib die Rohdaten als PHP-Array ZURÜCK (kein echo) für den Transform-Schritt.
-  10) Fehlerfälle: Exception/Fehlerobjekt nach oben reichen (kein HTML ausgeben).
-   ============================================================================ */
+// Schritt 1: Konfiguration
+date_default_timezone_set('Europe/Zurich');
 
+$buoys = [
+    'oahu'       => "https://surftruths.com/api/buoys/51000/readings.json",
+    'kauai'      => "https://surftruths.com/api/buoys/51001/readings.json",
+    'maui'       => "https://surftruths.com/api/buoys/51002/readings.json",
+    'big_island' => "https://surftruths.com/api/buoys/51004/readings.json"
+];
+
+// =============================
+// Funktion zum Datenholen
+// =============================
 function fetchBuoyData($url) {
-    $ch = curl_init ($url);
-    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec ($ch);
-    curl_close ($ch);
-    print_r($response);
+    // Schritt 3: cURL initialisieren
+    $ch = curl_init($url);
+
+    // Schritt 4: Optionen setzen
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => ['Accept: application/json']
+    ]);
+
+    // Schritt 5: Request ausführen
+    $response = curl_exec($ch);
+
+    // Transportfehler prüfen
+    if ($response === false) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        return ['error' => "cURL-Fehler bei $url: $error"];
+    }
+
+    // Schritt 6: HTTP-Status & Content-Type prüfen
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+    curl_close($ch);
+
+    if ($status !== 200 || stripos($contentType, 'application/json') === false) {
+        return ['error' => "Unerwartete Antwort von $url (Status $status, Content-Type $contentType)"];
+    }
+
+    // Schritt 7: JSON dekodieren
+    $data = json_decode($response, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        return ['error' => "JSON-Dekodierung fehlgeschlagen bei $url: " . json_last_error_msg()];
+    }
+
+    // Schritt 8: Minimalprüfung (z. B. leere Antwort)
+    if (!is_array($data) || count($data) === 0) {
+        return ['error' => "Keine gültigen Daten erhalten bei $url"];
+    }
+
+    // Schritt 9: Array zurückgeben
+    return $data;
 }
-    return fetchBuoyData("https://surftruths.com/api/buoys/51000/readings.json"); //oahu
-    return fetchBuoyData("https://surftruths.com/api/buoys/51001/readings.json"); //kauai
-    return fetchBuoyData("https://surftruths.com/api/buoys/51002/readings.json"); //maui
-    return fetchBuoyData("https://surftruths.com/api/buoys/51004/readings.json"); //big island
-   
+
+// =============================
+// Schritt 10: Alle Bojen abrufen
+// =============================
+$allData = [];
+foreach ($buoys as $island => $url) {
+    $allData[$island] = fetchBuoyData($url);
+}
+
+// Header für JSON-Ausgabe
+header('Content-Type: application/json; charset=utf-8');
+
+// Ausgabe mit print (schön formatiert)
+print json_encode($allData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
