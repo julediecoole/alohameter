@@ -1,9 +1,8 @@
 <?php
 date_default_timezone_set('Europe/Zurich');
+require_once 'config.php'; // DB-Verbindung
 
-require_once 'config.php'; // Verbindung zur DB
-
-// Bojen + Open-Meteo URLs
+//verschiedene bojen
 $buoys = [
     1 => [
         'name' => 'oahu',
@@ -26,9 +25,8 @@ $buoys = [
         'meteo' => "https://api.open-meteo.com/v1/forecast?latitude=17.538&longitude=-152.23&current=temperature_2m,wind_speed_10m&timezone=auto&wind_speed_unit=kn"
     ],
 ];
-
-// cURL-Funktion für JSON-Abfrage
-function fetchBuoyData($url) {
+//curl
+function fetchData($url) {
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
@@ -37,48 +35,39 @@ function fetchBuoyData($url) {
         CURLOPT_HTTPHEADER => ['Accept: application/json']
     ]);
     $response = curl_exec($ch);
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
     curl_close($ch);
-
-    if (!$response || $status !== 200 || stripos($contentType,'application/json')===false) {
-        return null;
-    }
-
     $data = json_decode($response, true);
     return $data ?: null;
 }
-
-// Alle Daten sammeln
+//alle daten
 $allData = [];
 
 foreach ($buoys as $id => $buoy) {
-    // SurfTruths-Daten abrufen
-    $data = fetchBuoyData($buoy['url']);
-    if (!$data || !isset($data[0])) continue;
+    $surfData = fetchData($buoy['url']);
+    if (!$surfData || !isset($surfData[0])) continue;
+    $latest = $surfData[0];
 
-    $derErsteWert = $data[0];
+//bojendaten
     $entry = [
-        'bojen_id'      => $id,
-        'wellenhoehe'   => isset($derErsteWert['swht']) ? floatval($derErsteWert['swht']) : null,
-        'wellenabstand' => isset($derErsteWert['swp']) ? floatval($derErsteWert['swp']) : null,
-        'created_at'    => date('Y-m-d H:i:s')
+        'bojen_id' => $id,
+        'wellenhoehe' => isset($latest['swht']) ? floatval($latest['swht']) : null,
+        'wellenabstand' => isset($latest['swp']) ? floatval($latest['swp']) : null,
+        'created_at' => date('Y-m-d H:i:s')
     ];
-
-    // Open-Meteo-Daten abrufen
-    $meteoData = isset($buoy['meteo']) ? fetchBuoyData($buoy['meteo']) : null;
+//meteodaten 
+    $meteoData = fetchData($buoy['meteo']);
     if ($meteoData && isset($meteoData['current'])) {
-        $entry['temperatur'] = isset($meteoData['current']['temperature_2m']) 
-            ? floatval($meteoData['current']['temperature_2m']) 
-            : null;
-        $entry['wind'] = isset($meteoData['current']['wind_speed_10m']) 
-            ? floatval($meteoData['current']['wind_speed_10m']) 
-            : null;
+        $entry['temperatur'] = isset($meteoData['current']['temperature_2m']) ? floatval($meteoData['current']['temperature_2m']) : null;
+        $entry['wind'] = isset($meteoData['current']['wind_speed_10m']) ? floatval($meteoData['current']['wind_speed_10m']) : null;
+    } else {
+        $entry['temperatur'] = null;
+        $entry['wind'] = null;
     }
 
     $allData[$buoy['name']] = $entry;
 }
 
-// JSON-Ausgabe für Test / Frontend
-header('Content-Type: application/json; charset=utf-8');
+// **echo**
+echo '<pre>';
 echo json_encode($allData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+echo '</pre>';
