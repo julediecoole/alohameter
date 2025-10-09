@@ -42,7 +42,7 @@ foreach ($data as $bojeName => $values) {
         'bojen_id'        => isset($values['bojen_id']) ? intval($values['bojen_id']) : 404,
         'wellenhoehe'     => isset($values['wellenhoehe']) ? floatval($values['wellenhoehe']) : 404,
         'wellenabstand'   => isset($values['wellenabstand']) ? floatval($values['wellenabstand']) : 404,
-        'temperatur'=> isset($values['temperatur']) ? round(floatval($values['temperatur']),1) : 404,
+        'temperatur'      => isset($values['temperatur']) ? round(floatval($values['temperatur']),1) : 404,
         'wind'            => isset($values['wind']) ? floatval($values['wind']) : 404,
         'created_at'      => isset($values['created_at']) ? $values['created_at'] : date('Y-m-d H:i:s')
     ];

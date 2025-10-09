@@ -12,62 +12,61 @@
    7) Commit & Erfolgsmeldung.
    8) Fehlerbehandlung mit Rollback (ohne Stacktrace).
    ============================================================================ */
+<?php
+/* ============================================================================
+   load.php – Lädt transformierte Messdaten in die Datenbank
+   ============================================================================
+   Anpassung für transform.php mit echo + Output-Buffering
+=========================================================================== */
 
-// (1) Konfiguration & Transformationsdaten einbinden
-require_once 'config.php';    // Stellt $pdo bereit
-require_once 'transform.php';     // Liefert z. B. $transform_json
+require_once 'config.php'; // stellt $pdo bereit
 
-// (2) JSON → Array konvertieren
-$dataArray = json_decode($transform_json, true);
+// 1) Transformierte Daten holen
+ob_start();
+include 'transform.php'; // transform.php macht echo json_encode(...)
+$jsonData = ob_get_clean();
+
+// 2) JSON dekodieren
+$dataArray = json_decode($jsonData, true);
 if (!is_array($dataArray)) {
     die("Fehler: transform.php hat kein gültiges JSON zurückgegeben.");
 }
 
 try {
-    // (3) PDO konfigurieren
+    // 3) PDO konfigurieren
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-    // (4) Transaktion starten
+    // 4) Transaktion starten
     $pdo->beginTransaction();
 
-    // (5) SQL-Statement vorbereiten
+    // 5) SQL-Statement vorbereiten
     $sql = "
-        INSERT INTO alohameter_messungen 
-            (bojen_id, wind, wellen, lufttemperatur, wassertemperatur)
-        VALUES 
-            (:bojen_id, :wind, :wellen, :lufttemperatur, :wassertemperatur)
+        INSERT INTO alohameter_messungen
+            (bojen_id, wellenhoehe, wellenabstand, wassertemperatur, wind, created_at)
+        VALUES
+            (:bojen_id, :wellenhoehe, :wellenabstand, :wassertemperatur, :wind, :created_at)
     ";
     $stmt = $pdo->prepare($sql);
 
-    // (6) Datensätze einfügen
+    // 6) Datensätze einfügen
     foreach ($dataArray as $item) {
-        // Nur vollständige Einträge einfügen
-        if (
-            !isset($item['bojen_id']) ||
-            !isset($item['wind']) ||
-            !isset($item['wellen']) ||
-            !isset($item['lufttemperatur']) ||
-            !isset($item['wassertemperatur'])
-        ) {
-            continue;
-        }
-
         $stmt->execute([
-            ':bojen_id'         => $item['bojen_id'],
-            ':wind'             => $item['wind'],
-            ':wellen'           => $item['wellen'],
-            ':lufttemperatur'   => $item['lufttemperatur'],
-            ':wassertemperatur' => $item['wassertemperatur']
+            ':bojen_id'       => $item['bojen_id'] ?? 404,
+            ':wellenhoehe'    => $item['wellenhoehe'] ?? 404,
+            ':wellenabstand'  => $item['wellenabstand'] ?? 404,
+            ':wassertemperatur'=> $item['wassertemperatur'] ?? 404,
+            ':wind'           => $item['wind'] ?? 404,
+            ':created_at'     => $item['created_at'] ?? date('Y-m-d H:i:s')
         ]);
     }
 
-    // (7) Commit und Erfolgsmeldung
+    // 7) Commit
     $pdo->commit();
     echo "Messdaten erfolgreich eingefügt.";
 
 } catch (PDOException $e) {
-    // (8) Rollback & Fehlermeldung
+    // Rollback bei Fehler
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
