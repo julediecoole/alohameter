@@ -7,7 +7,7 @@
 date_default_timezone_set('Europe/Zurich');
 
 $buoys = [
-    'oahu'       => "https://surftruths.com/api/buoys/51000/readings.json",
+    'oahu'       => "https://surftruths.com/api/buoys/51101/readings.json",
     'kauai'      => "https://surftruths.com/api/buoys/51001/readings.json",
     'maui'       => "https://surftruths.com/api/buoys/51002/readings.json",
     'big_island' => "https://surftruths.com/api/buoys/51004/readings.json"
