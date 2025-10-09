@@ -37,25 +37,21 @@ $allData = [];
 
 foreach ($buoys as $id => $buoy) {
     $data = fetchBuoyData($buoy['url']);
-    if (!$data || !isset($data['readings'][0])) continue; // keine Daten
 
-    $reading = $data['readings'][0]; // aktuellster Eintrag
+    echo "<pre>";
+//print_r($data);
+echo "</pre>";
+    if (!$data || !isset($data[0])) continue; // keine Daten
+
+    $derErsteWert = $data[0]; // aktuellster Eintrag
     $entry = [
         'bojen_id'       => $id,
-        'wind'           => isset($reading['windSpeed']) ? intval($reading['windSpeed']) : null,
-        'wellen'         => isset($reading['waveHeight']) ? floatval($reading['waveHeight']) : null,
-        'lufttemperatur' => isset($reading['airTemp']) ? floatval($reading['airTemp']) : null,
-        'wassertemperatur' => isset($reading['waterTemp']) ? floatval($reading['waterTemp']) : null,
+        'wellenhoehe'         => isset($derErsteWert['swht']) ? floatval($derErsteWert['swht']) : null,
+        'wellenabstand' => isset($derErsteWert['swp']) ? floatval($derErsteWert['swp']) : null,
         'created_at'     => date('Y-m-d H:i:s')
+        // 'wind'           => isset($derErsteWert['??']) ? intval($derErsteWert['??']) : null,
+        // 'temperatur'           => isset($derErsteWert['??']) ? intval($derErsteWert['??']) : null,
     ];
-
-    // Optional: direkt in DB speichern
-    $stmt = $pdo->prepare("
-        INSERT INTO alohameter_messungen 
-        (bojen_id, wind, wellen, lufttemperatur, wassertemperatur, created_at)
-        VALUES (:bojen_id, :wind, :wellen, :lufttemperatur, :wassertemperatur, :created_at)
-    ");
-    $stmt->execute($entry);
 
     $allData[$buoy['name']] = $entry;
 }
