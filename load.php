@@ -14,7 +14,7 @@
    ============================================================================ */
 
 // (1) Konfiguration & Transformationsdaten einbinden
-require_once '001_config.php';    // Stellt $pdo bereit
+require_once 'config.php';    // Stellt $pdo bereit
 require_once 'transform.php';     // Liefert z. B. $transform_json
 
 // (2) JSON → Array konvertieren
