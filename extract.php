@@ -1,77 +1,65 @@
 <?php
-// =============================
-// extract.php
-// =============================
-
-// Schritt 1: Konfiguration
 date_default_timezone_set('Europe/Zurich');
 
+require_once 'config.php'; // Verbindung zur DB
+
 $buoys = [
-    'oahu'       => "https://surftruths.com/api/buoys/51101/readings.json",
-    'kauai'      => "https://surftruths.com/api/buoys/51001/readings.json",
-    'maui'       => "https://surftruths.com/api/buoys/51002/readings.json",
-    'big_island' => "https://surftruths.com/api/buoys/51004/readings.json"
+    1 => ['name' => 'oahu',       'url' => "https://surftruths.com/api/buoys/51101/readings.json"],
+    2 => ['name' => 'kauai',      'url' => "https://surftruths.com/api/buoys/51001/readings.json"],
+    3 => ['name' => 'maui',       'url' => "https://surftruths.com/api/buoys/51002/readings.json"],
+    4 => ['name' => 'big_island', 'url' => "https://surftruths.com/api/buoys/51004/readings.json"]
 ];
 
-// =============================
-// Funktion zum Datenholen
-// =============================
+// Funktion: cURL holen + JSON dekodieren
 function fetchBuoyData($url) {
-    // Schritt 3: cURL initialisieren
     $ch = curl_init($url);
-
-    // Schritt 4: Optionen setzen
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_TIMEOUT => 10,
         CURLOPT_HTTPHEADER => ['Accept: application/json']
     ]);
-
-    // Schritt 5: Request ausführen
     $response = curl_exec($ch);
-
-    // Transportfehler prüfen
-    if ($response === false) {
-        $error = curl_error($ch);
-        curl_close($ch);
-        return ['error' => "cURL-Fehler bei $url: $error"];
-    }
-
-    // Schritt 6: HTTP-Status & Content-Type prüfen
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
     curl_close($ch);
 
-    if ($status !== 200 || stripos($contentType, 'application/json') === false) {
-        return ['error' => "Unerwartete Antwort von $url (Status $status, Content-Type $contentType)"];
+    if (!$response || $status !== 200 || stripos($contentType,'application/json')===false) {
+        return null;
     }
 
-    // Schritt 7: JSON dekodieren
     $data = json_decode($response, true);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        return ['error' => "JSON-Dekodierung fehlgeschlagen bei $url: " . json_last_error_msg()];
-    }
-
-    // Schritt 8: Minimalprüfung (z. B. leere Antwort)
-    if (!is_array($data) || count($data) === 0) {
-        return ['error' => "Keine gültigen Daten erhalten bei $url"];
-    }
-
-    // Schritt 9: Array zurückgeben
-    return $data;
+    return $data ?: null;
 }
 
-// =============================
-// Schritt 10: Alle Bojen abrufen
-// =============================
+// Alle Bojen-Daten sammeln & transformieren
 $allData = [];
-foreach ($buoys as $island => $url) {
-    $allData[$island] = fetchBuoyData($url);
+
+foreach ($buoys as $id => $buoy) {
+    $data = fetchBuoyData($buoy['url']);
+    if (!$data || !isset($data['readings'][0])) continue; // keine Daten
+
+    $reading = $data['readings'][0]; // aktuellster Eintrag
+    $entry = [
+        'bojen_id'       => $id,
+        'wind'           => isset($reading['windSpeed']) ? intval($reading['windSpeed']) : null,
+        'wellen'         => isset($reading['waveHeight']) ? floatval($reading['waveHeight']) : null,
+        'lufttemperatur' => isset($reading['airTemp']) ? floatval($reading['airTemp']) : null,
+        'wassertemperatur' => isset($reading['waterTemp']) ? floatval($reading['waterTemp']) : null,
+        'created_at'     => date('Y-m-d H:i:s')
+    ];
+
+    // Optional: direkt in DB speichern
+    $stmt = $pdo->prepare("
+        INSERT INTO alohameter_messungen 
+        (bojen_id, wind, wellen, lufttemperatur, wassertemperatur, created_at)
+        VALUES (:bojen_id, :wind, :wellen, :lufttemperatur, :wassertemperatur, :created_at)
+    ");
+    $stmt->execute($entry);
+
+    $allData[$buoy['name']] = $entry;
 }
 
-// Header für JSON-Ausgabe
+// JSON-Ausgabe für Test / Frontend
 header('Content-Type: application/json; charset=utf-8');
-
-// Ausgabe mit print (schön formatiert)
-print json_encode($allData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+echo json_encode($allData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
