@@ -4,10 +4,23 @@ date_default_timezone_set('Europe/Zurich');
 require_once 'config.php'; // Verbindung zur DB
 
 $buoys = [
-    1 => ['name' => 'oahu',       'url' => "https://surftruths.com/api/buoys/51101/readings.json"],
-    2 => ['name' => 'kauai',      'url' => "https://surftruths.com/api/buoys/51001/readings.json"],
-    3 => ['name' => 'maui',       'url' => "https://surftruths.com/api/buoys/51002/readings.json"],
-    4 => ['name' => 'big_island', 'url' => "https://surftruths.com/api/buoys/51004/readings.json"]
+    1 => ['name' => 'oahu',
+        'url' => "https://surftruths.com/api/buoys/51101/readings.json",
+        'meteo' => "https://api.open-meteo.com/v1/forecast?latitude=24.359&longitude=-162.081&current=temperature_2m,wind_speed_10m&timezone=auto&wind_speed_unit=kn"
+    ],
+    2 => ['name' => 'kauai',      
+        'url' => "https://surftruths.com/api/buoys/51001/readings.json",
+        'meteo' => "https://api.open-meteo.com/v1/forecast?latitude=24.451&longitude=-162.008&hourly=temperature_2m,wind_speed_10m&current=temperature_2m&timezone=auto&forecast_days=1&wind_speed_unit=kn"
+    ],
+    3 => ['name' => 'maui',       
+    'url' => "https://surftruths.com/api/buoys/51002/readings.json",
+    'meteo' => "https://api.open-meteo.com/v1/forecast?latitude=17.042&longitude=-157.746&hourly=temperature_2m,wind_speed_10m&current=temperature_2m&timezone=auto&forecast_days=1&wind_speed_unit=kn"
+    ],
+
+    4 => ['name' => 'big_island', 
+    'url' => "https://surftruths.com/api/buoys/51004/readings.json",
+    'meteo' => "https://api.open-meteo.com/v1/forecast?latitude=17.538&longitude=-152.23&hourly=temperature_2m,wind_speed_10m&current=temperature_2m&timezone=auto&forecast_days=1&wind_speed_unit=kn"
+    ],
 ];
 
 // Funktion: cURL holen + JSON dekodieren
