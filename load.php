@@ -12,7 +12,6 @@
    7) Commit & Erfolgsmeldung.
    8) Fehlerbehandlung mit Rollback (ohne Stacktrace).
    ============================================================================ */
-<?php
 /* ============================================================================
    load.php – Lädt transformierte Messdaten in die Datenbank
    ============================================================================
@@ -22,9 +21,8 @@
 require_once 'config.php'; // stellt $pdo bereit
 
 // 1) Transformierte Daten holen
-ob_start();
-include 'transform.php'; // transform.php macht echo json_encode(...)
-$jsonData = ob_get_clean();
+ // transform.php macht echo json_encode(...)
+$jsonData = include('transform.php');
 
 // 2) JSON dekodieren
 $dataArray = json_decode($jsonData, true);
@@ -34,41 +32,38 @@ if (!is_array($dataArray)) {
 
 try {
     // 3) PDO konfigurieren
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $pdo = new PDO($dsn, $username, $password, $options);
 
-    // 4) Transaktion starten
-    $pdo->beginTransaction();
-
+    
     // 5) SQL-Statement vorbereiten
-    $sql = "
-        INSERT INTO alohameter_messungen
-            (bojen_id, wellenhoehe, wellenabstand, wassertemperatur, wind, created_at)
-        VALUES
-            (:bojen_id, :wellenhoehe, :wellenabstand, :wassertemperatur, :wind, :created_at)
-    ";
+    $sql = "INSERT INTO alohameter_messungen (bojen_id, wellenhoehe, wellenabstand, temperatur, wind) VALUES (?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
 
     // 6) Datensätze einfügen
-    foreach ($dataArray as $item) {
-        $stmt->execute([
-            ':bojen_id'       => $item['bojen_id'] ?? 404,
-            ':wellenhoehe'    => $item['wellenhoehe'] ?? 404,
-            ':wellenabstand'  => $item['wellenabstand'] ?? 404,
-            ':wassertemperatur'=> $item['wassertemperatur'] ?? 404,
-            ':wind'           => $item['wind'] ?? 404,
-            ':created_at'     => $item['created_at'] ?? date('Y-m-d H:i:s')
-        ]);
-    }
+   foreach ($dataArray as $item) {
+    $stmt->execute([
+        $item['bojen_id'] ?? 404,
+        $item['wellenhoehe'] ?? 404,
+        $item['wellenabstand'] ?? 404,
+        $item['temperatur'] ?? 404,
+        $item['wind'] ?? 404
+    ]);
+}
+
+// CREATE TABLE ⁠ alohameter_messungen ⁠ (
+//   ⁠ id ⁠ int(11) UNSIGNED NOT NULL,
+//   ⁠ bojen_id ⁠ int(11) NOT NULL,
+//   ⁠ wellenhoehe ⁠ float NOT NULL,
+//   ⁠ wellenabstand ⁠ float NOT NULL,
+//   ⁠ temperatur ⁠ decimal(10,7) NOT NULL,
+//   ⁠ wind ⁠ int(11) NOT NULL,
+//   ⁠ created_at ⁠ timestamp NOT NULL DEFAULT current_timestamp()
+// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
     // 7) Commit
-    $pdo->commit();
     echo "Messdaten erfolgreich eingefügt.";
 
 } catch (PDOException $e) {
-    // Rollback bei Fehler
-    if ($pdo->inTransaction()) {
-        $pdo->rollBack();
-    }
-    die("Fehler beim Laden der Daten. Bitte später erneut versuchen.");
+    die("Verbindung zur Datenbank konnte nicht hergestellt werden: " . $e->getMessage());
 }
+

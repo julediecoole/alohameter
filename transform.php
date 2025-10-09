@@ -21,17 +21,16 @@
 =========================================================================== */
 
 // 1) Rohdaten von extract.php holen (Output-Buffering)
-ob_start();
-include 'extract.php';
-$jsonFromExtract = ob_get_clean();
+
+$jsonData = include('extract.php');
+
 
 // 2) JSON dekodieren
-$data = json_decode($jsonFromExtract, true);
-if (!is_array($data)) {
-    // immer gültiges JSON zurückgeben, wenn extract nichts liefert
-    echo json_encode([]);
-    return;
-}
+$data = json_decode($jsonData, true);
+
+// echo "<pre>";
+// print_r($data);
+// echo "</pre>";
 
 // 3) Array für transformierte Daten vorbereiten
 $transformedData = [];
@@ -51,6 +50,6 @@ foreach ($data as $bojeName => $values) {
     $transformedData[$bojeName] = $entry;
 }
 
-// 5) JSON ausgeben
+// // 5) JSON ausgeben
 header('Content-Type: application/json; charset=utf-8');
-echo json_encode($transformedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+return json_encode($transformedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

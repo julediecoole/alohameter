@@ -68,6 +68,7 @@ foreach ($buoys as $id => $buoy) {
 }
 
 // **echo**
-echo '<pre>';
-echo json_encode($allData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-echo '</pre>';
+
+return json_encode($allData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+
