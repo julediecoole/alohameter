@@ -1,6 +1,6 @@
 body {
   background-color: #bceeff;
-  font-family: "Khmer MN", sans-serif;
+  font-family: "Khmer MN";
   margin: 0;
   padding: 0;
   color: #138987;
@@ -53,41 +53,48 @@ footer {
 }
 
 .svg-stack {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  position: relative; /* Stack im normalen Fluss unter dem Titel */
   width: 100%;
-  height: auto;
-  z-index: -1;
+  height: 200px; /* Höhe des Wellen-Stacks */
+  margin-top: 10rem; /* Abstand vom Titel */
   overflow: visible;
   pointer-events: none;
+  z-index: -1;
 }
 
+/* Jede Ebene absolut innerhalb des Stacks positionieren */
 .svg-stack .layer {
   position: absolute;
-  bottom: 0;
-  width: 120%; /* leicht breiter, damit keine Lücken entstehen */
+  bottom: 0; /* am unteren Rand des Stacks */
+  width: 120%; /* etwas breiter für Lückenfreiheit */
   height: auto;
   object-fit: contain;
 }
 
-/* jede Ebene leicht verschieben */
+/* Ebenen leicht verschieben für dynamischen Look */
 .svg-stack .layer:nth-child(1) {
   transform: translateY(0px) translateX(0px);
   z-index: 1;
 }
-
 .svg-stack .layer:nth-child(2) {
-  transform: translateY(20px) translateX(-30px);
+  transform: translateY(20px) translateX(-20px);
   z-index: 2;
 }
-
 .svg-stack .layer:nth-child(3) {
-  transform: translateY(40px) translateX(20px);
+  transform: translateY(40px) translateX(10px);
   z-index: 3;
 }
-
 .svg-stack .layer:nth-child(4) {
-  transform: translateY(60px) translateX(-40px);
+  transform: translateY(60px) translateX(-10px);
   z-index: 4;
+}
+
+.background-below-waves {
+  position: fixed;
+  top: calc(100% - 100px); /* Höhe der Wellen ungefähr */
+  left: 0;
+  width: 100%;
+  height: 400px; /* passt zur Höhe der Wellen */
+  background-color: #74bfba; /* andere Farbe unter den Wellen */
+  z-index: -2; /* hinter den Wellen, noch weiter unten */
 }
