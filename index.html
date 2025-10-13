@@ -39,38 +39,38 @@
         <p><a href="https://www.fhgr.ch">www.fhgr.ch</a></p>
     </footer>
 
-    <!-- Modal für Popup-Karte -->
-<div id="cardModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
+<!-- Modal für Popup-Karte -->
+    <!-- Button zum Öffnen -->
+     <button id="myBtn" class="open-btn">Kauai 48h Wind</button>
 
-    <div class="popup-card">
-      <div class="card-header">
-        <h2>Kauai</h2>
-        <span class="time-range">48h</span>
-      </div>
+    <!-- Modal -->
+    <div id="myModal" class="modal">
 
-      <div class="card-body">
-        <div class="card-title">
-          <img src="icons/wind.svg" class="icon" alt="Wind Icon">
-          <h3>Wind</h3>
+        <!-- Modal-Inhalt -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+
+        <!-- Header -->
+        <div class="card-header">
+            <h2>Kauai <span>48h</span></h2>
         </div>
 
-        <div class="chart-area">
-          <img src="img/chart-placeholder.png" alt="Diagramm">
+        <!-- Hauptinhalt -->
+        <div class="card-body">
+            <div class="icon-title">
+                <span class="wind-icon">💨</span>
+            <h3>Wind</h3>
         </div>
-      </div>
 
-      <button class="arrow left">◀</button>
-      <button class="arrow right">▶</button>
+        <!-- Platzhalter für das Diagramm -->
+        <div class="chart">
+            <img src="chart-placeholder.png" alt="Winddiagramm Kauai" />
+        </div>
     </div>
   </div>
 </div>
 
-<!-- Button zum Öffnen (nur zu Testzwecken) -->
-<div style="text-align:center; margin: 2rem;">
-  <button id="openModalBtn">📊 Zeige Karte</button>
-</div>
+
 
 </body>
 

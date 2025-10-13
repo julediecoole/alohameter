@@ -77,143 +77,112 @@ footer {
   font-size: 0.9rem;
 }
 
-/* === MODAL OVERLAY === */
+/* Modal*/
+/* Modal-Hintergrund */
 .modal {
   display: none;
   position: fixed;
-  z-index: 100;
+  z-index: 10;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* === MODAL BOX === */
+/* Modal-Inhalt */
 .modal-content {
-  background-color: #e8fbff;
-  margin: 8% auto;
-  border-radius: 25px;
-  padding: 2rem;
-  border: 2px solid #138987;
-  width: 85%;
-  max-width: 420px;
-  position: relative;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-  animation: fadeIn 0.3s ease-in-out;
+  background-color: white;
+  margin: 5% auto;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
 }
 
-/* === ANIMATION === */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* === CLOSE BUTTON === */
-.close-btn {
-  color: #138987;
-  font-size: 1.8rem;
-  font-weight: bold;
-  position: absolute;
-  right: 1.2rem;
-  top: 1rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.close-btn:hover {
-  color: #0a5f5d;
-}
-
-/* === HEADER === */
+/* Header */
 .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  background-color: #d47b5a;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
 }
 
 .card-header h2 {
   margin: 0;
   font-size: 2rem;
-  color: #138987;
+  font-family: "Khmer MN", sans-serif;
 }
 
-.card-header .time-range {
-  background-color: #138987;
-  color: white;
-  border-radius: 15px;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.9rem;
+.card-header span {
+  font-size: 1rem;
+  font-weight: normal;
+  margin-left: 0.5rem;
 }
 
-/* === BODY === */
+/* Body */
 .card-body {
-  background-color: white;
-  border-radius: 20px;
+  text-align: center;
   padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.card-title {
+.icon-title {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  color: #138987;
+  margin-bottom: 1rem;
 }
 
-.card-title h3 {
+.icon-title h3 {
   margin: 0;
-  color: #138987;
   font-size: 1.4rem;
 }
 
-.icon {
-  width: 28px;
-  height: 28px;
-}
-
-.chart-area {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.chart-area img {
+/* Diagramm-Platzhalter */
+.chart img {
   width: 100%;
-  border-radius: 15px;
+  height: auto;
 }
 
-/* === ARROWS === */
-.arrow {
-  background-color: #138987;
+/* Button */
+.open-btn {
+  display: block;
+  margin: 2rem auto;
+  background-color: #d47b5a;
   color: white;
   border: none;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  font-size: 1.2rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: 0.3s;
+  transition: background-color 0.3s ease;
 }
 
-.arrow.left { left: -25px; }
-.arrow.right { right: -25px; }
-
-.arrow:hover {
-  background-color: #0b6460;
+.open-btn:hover {
+  background-color: #b85e3e;
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 480px) {
-  .modal-content {
-    width: 90%;
-    padding: 1.5rem;
-  }
-
-  .arrow {
-    display: none; /* auf Handy keine Pfeile */
-  }
+/* Close */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  margin-right: 10px;
+  cursor: pointer;
 }
+
+.close:hover {
+  color: black;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
