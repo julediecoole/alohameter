@@ -50,7 +50,7 @@ try {
 
     // 2) Basis-SQL
     $sql = "SELECT id, bojen_id, wellenhoehe, wellenabstand, temperatur, wind, created_at
-            FROM alohameter_messungen WHERE 1=1";
+            FROM alohameter_messungen WHERE 1=1"; // 1=1 erleichtert das Anhängen von AND-Bedingungen
 
     $params = [];
 
@@ -95,9 +95,9 @@ try {
 
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['error' => 'Datenbankfehler beim Abrufen der Messdaten.']);
-    error_log($e->getMessage()); // Log für Admin, nicht an den Client senden
+    echo json_encode(['error' => $e->getMessage()]);
     exit;
+
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Interner Serverfehler.']);
