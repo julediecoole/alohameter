@@ -98,3 +98,144 @@ footer {
   background-color: #74bfba; /* andere Farbe unter den Wellen */
   z-index: -2; /* hinter den Wellen, noch weiter unten */
 }
+
+/* === MODAL OVERLAY === */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+/* === MODAL BOX === */
+.modal-content {
+  background-color: #e8fbff;
+  margin: 8% auto;
+  border-radius: 25px;
+  padding: 2rem;
+  border: 2px solid #138987;
+  width: 85%;
+  max-width: 420px;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* === ANIMATION === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === CLOSE BUTTON === */
+.close-btn {
+  color: #138987;
+  font-size: 1.8rem;
+  font-weight: bold;
+  position: absolute;
+  right: 1.2rem;
+  top: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  color: #0a5f5d;
+}
+
+/* === HEADER === */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: #138987;
+}
+
+.card-header .time-range {
+  background-color: #138987;
+  color: white;
+  border-radius: 15px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+/* === BODY === */
+.card-body {
+  background-color: white;
+  border-radius: 20px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.card-title h3 {
+  margin: 0;
+  color: #138987;
+  font-size: 1.4rem;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+}
+
+.chart-area {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.chart-area img {
+  width: 100%;
+  border-radius: 15px;
+}
+
+/* === ARROWS === */
+.arrow {
+  background-color: #138987;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: 0.3s;
+}
+
+.arrow.left { left: -25px; }
+.arrow.right { right: -25px; }
+
+.arrow:hover {
+  background-color: #0b6460;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .modal-content {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  .arrow {
+    display: none; /* auf Handy keine Pfeile */
+  }
+}
