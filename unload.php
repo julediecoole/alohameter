@@ -49,9 +49,12 @@ try {
     }
 
     // 2) Basis-SQL
-    $sql = "SELECT id, bojen_id, wellenhoehe, wellenabstand, temperatur, wind, created_at
-            FROM alohameter_messungen WHERE 1=1"; // 1=1 erleichtert das Anhängen von AND-Bedingungen
-
+    $sql = "SELECT m.id, m.bojen_id, b.namen, b.code,
+               m.wellenhoehe, m.wellenabstand, m.temperatur, m.wind, m.created_at
+        FROM alohameter_messungen m
+        JOIN alohameter_boje b ON m.bojen_id = b.id
+        WHERE 1=1";
+        
     $params = [];
 
     // 3) Dynamisch WHERE-Bedingungen anhängen

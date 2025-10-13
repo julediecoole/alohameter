@@ -18,16 +18,29 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 
-  // === TEIL 2: WASSERTEMPERATUR-CHART ===
-  const apiUrl = "https://im3.im-abc.ch/etl-boilerplate/solution/550_unload.php"; 
-  // Deine Datenquelle für Wassertemperaturen (4 Inseln)
+  // === 🌊 TEIL 2: WASSERTEMPERATUR-CHART ===
+  const apiUrl = "https://alohameter.melinagast.ch/unload.php";
 
   fetch(apiUrl)
     .then((response) => response.json())
     .then((data) => {
+      console.log("Geladene Temperaturdaten:", data);
+
+      // Daten nach Inselnamen gruppieren
+      const groupedData = {};
+      data.forEach(item => {
+        const island = item.namen;
+        if (!groupedData[island]) groupedData[island] = [];
+        groupedData[island].push({
+          temperature_celsius: parseFloat(item.temperatur),
+          created_at: item.created_at
+        });
+      });
+
+      console.log("Gruppierte Daten:", groupedData);
+
       const ctx = document.getElementById("wassertemperatur").getContext("2d");
 
-      // Farben definieren
       const islandColors = {
         Kauai: "#F9B9AA",
         Maui: "#138987",
@@ -35,23 +48,25 @@ document.addEventListener("DOMContentLoaded", function() {
         "Big Island": "#BCEEFF"
       };
 
-      // Datensätze für jede Insel
-      const datasets = Object.keys(data).map((island) => ({
+      // Labels (Datum)
+      const firstIsland = Object.keys(groupedData)[0];
+      const labels = groupedData[firstIsland].map((item) =>
+        new Date(item.created_at).toLocaleDateString("de-DE", {
+          day: "2-digit",
+          month: "2-digit"
+        })
+      );
+
+      // Datensätze erstellen
+      const datasets = Object.keys(groupedData).map((island) => ({
         label: island,
-        data: data[island].map((item) => item.temperature_celsius),
+        data: groupedData[island].map((item) => item.temperature_celsius),
         borderColor: islandColors[island] || "#888",
         backgroundColor: (islandColors[island] || "#888") + "55",
         fill: true,
         tension: 0.3
       }));
 
-      // Labels = Datum (z. B. 13.10., 14.10., …)
-      const firstIsland = Object.keys(data)[0];
-      const labels = data[firstIsland].map((item) =>
-        new Date(item.created_at).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })
-      );
-
-      // Chart erstellen
       new Chart(ctx, {
         type: "line",
         data: { labels, datasets },
@@ -59,10 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
           responsive: true,
           plugins: {
             legend: { position: "top" },
-            title: { 
-              display: true, 
-              text: "Wassertemperaturen der Woche (°C)" 
-            }
+            title: { display: true, text: "Wassertemperaturen der Woche (°C)" }
           },
           scales: {
             y: {
