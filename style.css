@@ -26,7 +26,7 @@ h1 {
 
 /* infotext */
 .info {
-  max-width: 600px;
+  max-width: 70rem;
   margin: 2rem auto;
   padding-left: 1rem;
   line-height: 1.6;
@@ -59,7 +59,7 @@ a:hover {
 /* Wellen-SVG */
 .wellen .layer {
   width: 100%;
-  height: auto;
+  height: 95vh;
   display: block;
   position: relative;
   z-index: 1;
@@ -69,7 +69,6 @@ a:hover {
 .wellen .himmel {
   width: 100%;
   position: relative;
-  height: auto;
   display: block;
   z-index: -1;
   transform: translateY(-1400px);
