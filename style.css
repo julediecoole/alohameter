@@ -11,9 +11,19 @@ body {
 /* titel */
 h1 {
   text-align: left;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   font-size: 8rem;
   padding-left: 3rem;
+}
+
+#weather {
+  text-align: left;
+  font-size: 2rem;
+  padding-left: 3rem;
+  line-height: 0.5;
+  transform: translateY(
+    -130px
+  ); /* verschiebt den ganzen Container 20px nach oben */
 }
 
 /* infotext */
@@ -39,27 +49,12 @@ a:hover {
   color: #bceeff;
 }
 
-#weather {
-  text-align: left;
-  font-size: 2rem;
-  padding-left: 3rem;
-  line-height: 0.5;
-  transform: translateY(
-    -60px
-  ); /* verschiebt den ganzen Container 20px nach oben */
-}
-
 /* Wellen-Container */
 .wellen {
   position: relative;
   width: 100%;
   padding-top: 1rem; /* Abstand vom oberen Rand reduziert, damit es nach oben rückt */
   pointer-events: none;
-  z-index: 1; /* über der gelben Ebene */
-  /* Optional: leicht nach oben verschieben */
-  transform: translateY(
-    -300px
-  ); /* verschiebt den ganzen Container 20px nach oben */
 }
 
 /* Wellen-SVG */
@@ -68,6 +63,19 @@ a:hover {
   height: auto;
   display: block;
   position: relative;
+  z-index: 1; /* über der gelben Ebene */
+  /* Optional: leicht nach oben verschieben */
+  transform: translateY(
+    -150px
+  ); /* verschiebt den ganzen Container 20px nach oben */
+}
+
+.wellen .himmel {
+  width: 100%; /* volle Breite */
+  position: relative;
+  height: auto;
+  display: block;
+  z-index: 0;
 }
 /* footah */
 footer {
@@ -75,6 +83,7 @@ footer {
   padding: 1rem;
   margin-top: 3rem;
   font-size: 0.9rem;
+  color: white;
 }
 
 /* === MODAL OVERLAY === */
@@ -106,8 +115,14 @@ footer {
 
 /* === ANIMATION === */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* === CLOSE BUTTON === */
@@ -199,8 +214,12 @@ footer {
   transition: 0.3s;
 }
 
-.arrow.left { left: -25px; }
-.arrow.right { right: -25px; }
+.arrow.left {
+  left: -25px;
+}
+.arrow.right {
+  right: -25px;
+}
 
 .arrow:hover {
   background-color: #0b6460;
