@@ -1,6 +1,6 @@
 body {
-  /* background-color: #74bfba; */
-  background-color: white;
+  background-color: #74bfba;
+  /*background-color: white;*/
   font-family: "Khmer MN";
   margin: 0;
   padding: 0;
@@ -18,7 +18,7 @@ h1 {
 
 /* infotext */
 .info {
-  max-width: 600px;
+  max-width: 70rem;
   margin: 2rem auto;
   padding-left: 1rem;
   line-height: 1.6;
@@ -53,7 +53,8 @@ a:hover {
 .wellen {
   position: relative;
   width: 100%;
-  padding-top: 1rem; /* Abstand vom oberen Rand reduziert, damit es nach oben rückt */
+  height: 120vh;
+  padding-top: 1rem;
   pointer-events: none;
   z-index: 1; /* über der gelben Ebene */
   /* Optional: leicht nach oben verschieben */
@@ -64,11 +65,22 @@ a:hover {
 
 /* Wellen-SVG */
 .wellen .layer {
-  width: 100%; /* volle Breite */
-  height: auto;
+  width: 100%;
+  height: 95vh;
   display: block;
   position: relative;
+  z-index: 1;
+  transform: translateY(-150px);
 }
+
+.wellen .himmel {
+  width: 100%;
+  position: relative;
+  display: block;
+  z-index: -1;
+  transform: translateY(-1400px);
+}
+
 /* footah */
 footer {
   text-align: center;
