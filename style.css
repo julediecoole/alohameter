@@ -64,24 +64,37 @@ h1 {
   font-size: 8rem;
   padding-left: 3rem;
 }
-
-#weather {
+/* titel2 */
+h2 {
   text-align: left;
+  font-size: 6rem;
+  font-weight: bold;
+  padding-left: 3rem;
+  color: #ffffff;
+}
+
+
+p {
   font-size: 2rem;
+  text-align: left;
+  padding-left: 3rem;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+#weather p {
+  all: unset;               /* setzt alle globalen p-Stile zurück */
+  font-size: 2rem;          /* wendet deinen Wetterstil wieder an */
+  line-height: 1.5;
+  color: #138987;
   padding-left: 3rem;
   padding-right: 5px;
-  line-height: 0.5;
+  text-align: left;
   transform: translateY(-130px);
+  display: block;           /* nötig, da all: unset alles löscht */
 }
 
-/* infotext */
-.info {
-  text-align: left;
-  padding-left: 15rem;
-  line-height: 1.5;
-  font-size: 2rem;
-  color: white;
-}
+
 
 /* links */
 a {
