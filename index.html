@@ -1,19 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlohaMeter</title>
-    <!-- CSS einbinden -->
+
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- JavaScript -->
+    <script defer src="weather.js"></script>
 </head>
 
-
-
 <body>
-    <h1>AlohaMeter</h1> 
-    <h2>Ebbe: 19:30 <br> Flut: 8:50</h2>
+    <h1>AlohaMeter</h1>
+
+    <!-- Wetterdaten -->
+    <div id="weather">
+        <p>Temperatur: <span id="temperature">Lädt...</span></p>
+        <p>Windgeschwindigkeit: <span id="wind_speed">Lädt...</span></p>
+    </div>
 
     <div class="svg-stack">
         <img src="wellen/welle (ebbe&flut)1.png" class="layer">
@@ -22,18 +29,18 @@
         <img src="wellen/welle (ebbe&flut)4.png" class="layer">
     </div>
 
-
     <section class="info">
         <p>
             Hawaii ist von Meer umgeben, aber die Bedingungen unterscheiden sich je nach Insel.
-            Unsere Daten zeigen dir live, wie sich die Temperaturen und Gezeiten rund um
+            Unsere Daten zeigen dir live, wie sich die Temperaturen und Windgeschwindigkeiten rund um
             Kauai, Oahu, Maui und Big Island verändern.
         </p>
+
+      
     </section>
 
     <footer>
-    <p><a href="https://www.fhgr.ch">www.fhgr.ch</a></p>
-
+        <p><a href="https://www.fhgr.ch">www.fhgr.ch</a></p>
     </footer>
 </body>
 
