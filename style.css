@@ -1,6 +1,55 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+v2.0 | 20110126
+License: none (public domain)
+*/
+/* html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+} */
+/* HTML5 display-role reset for older browsers */
+/* article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+} */
+
+/*end Css reset*/
+
 body {
   background-color: #74bfba;
-  /*background-color: white;*/
   font-family: "Khmer MN";
   margin: 0;
   padding: 0;
@@ -11,17 +60,25 @@ body {
 /* titel */
 h1 {
   text-align: left;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   font-size: 8rem;
   padding-left: 3rem;
 }
 
+#weather {
+  text-align: left;
+  font-size: 2rem;
+  padding-left: 3rem;
+  padding-right: 5px;
+  line-height: 0.5;
+  transform: translateY(-130px);
+}
+
 /* infotext */
 .info {
-  max-width: 70rem;
-  margin: 2rem auto;
-  padding-left: 1rem;
-  line-height: 1.6;
+  text-align: left;
+  padding-left: 15rem;
+  line-height: 1.5;
   font-size: 2rem;
   color: white;
 }
@@ -39,28 +96,12 @@ a:hover {
   color: #bceeff;
 }
 
-#weather {
-  text-align: left;
-  font-size: 2rem;
-  padding-left: 3rem;
-  line-height: 0.5;
-  transform: translateY(
-    -60px
-  ); /* verschiebt den ganzen Container 20px nach oben */
-}
-
 /* Wellen-Container */
 .wellen {
-  position: relative;
   width: 100%;
   height: 120vh;
   padding-top: 1rem;
   pointer-events: none;
-  z-index: 1; /* über der gelben Ebene */
-  /* Optional: leicht nach oben verschieben */
-  transform: translateY(
-    -300px
-  ); /* verschiebt den ganzen Container 20px nach oben */
 }
 
 /* Wellen-SVG */
@@ -68,17 +109,42 @@ a:hover {
   width: 100%;
   height: 95vh;
   display: block;
-  position: relative;
+  position: absolute;
   z-index: 1;
   transform: translateY(-150px);
 }
 
 .wellen .himmel {
   width: 100%;
-  position: relative;
+  position: absolute;
   display: block;
   z-index: -1;
-  transform: translateY(-1400px);
+  transform: translateY(-500px);
+}
+.inseln-container {
+  position: absolute;
+  top: 50%; /* vertikal über Wellen */
+  left: 50%; /* horizontal Mitte */
+  transform: translate(-50%, -50%); /* exakte Mitte */
+  display: flex;
+  justify-content: center;
+  z-index: 2; /* über Wellen */
+  width: 100%;
+}
+
+.inseln-container img {
+  width: 50%;
+  height: auto;
+}
+
+.inseln {
+  display: flex; /* mehrere Inseln nebeneinander */
+  gap: 1rem; /* Abstand zwischen Inseln */
+}
+
+.inseln img {
+  height: 80px; /* Größe der Inseln anpassen */
+  width: auto;
 }
 
 /* footah */
@@ -87,39 +153,46 @@ footer {
   padding: 1rem;
   margin-top: 3rem;
   font-size: 0.9rem;
+  color: white;
 }
 
 /* === MODAL OVERLAY === */
 .modal {
   display: none;
   position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
+  z-index: 10;
+  inset: 0; /* ersetzt top, left, right, bottom */
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px); /* weiches Hintergrundblur */
+  overflow: auto;
 }
 
-/* === MODAL BOX === */
+/* === MODAL CONTENT === */
 .modal-content {
-  background-color: #e8fbff;
-  margin: 8% auto;
-  border-radius: 25px;
-  padding: 2rem;
-  border: 2px solid #138987;
-  width: 85%;
-  max-width: 420px;
   position: relative;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-  animation: fadeIn 0.3s ease-in-out;
+  background-color: #fff;
+  margin: 5% auto;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
+  font-family: "Khmer MN", sans-serif;
 }
 
 /* === ANIMATION === */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* === CLOSE BUTTON === */
@@ -128,10 +201,10 @@ footer {
   font-size: 1.8rem;
   font-weight: bold;
   position: absolute;
-  right: 1.2rem;
-  top: 1rem;
+  right: 1rem;
+  top: 0.8rem;
   cursor: pointer;
-  transition: 0.3s;
+  transition: color 0.2s ease;
 }
 
 .close-btn:hover {
@@ -140,92 +213,76 @@ footer {
 
 /* === HEADER === */
 .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  background-color: #d47b5a;
+  color: white;
+  text-align: center;
+  padding: 1.2rem;
 }
 
 .card-header h2 {
   margin: 0;
-  font-size: 2rem;
-  color: #138987;
+  font-size: 1.9rem;
 }
 
-.card-header .time-range {
-  background-color: #138987;
-  color: white;
-  border-radius: 15px;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.9rem;
+.card-header span {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-left: 0.3rem;
 }
 
 /* === BODY === */
 .card-body {
-  background-color: white;
-  border-radius: 20px;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  padding: 1.5rem;
 }
 
-.card-title {
+.icon-title {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  color: #138987;
+  margin-bottom: 1rem;
 }
 
-.card-title h3 {
+.icon-title h3 {
   margin: 0;
-  color: #138987;
   font-size: 1.4rem;
 }
 
-.icon {
-  width: 28px;
-  height: 28px;
-}
-
-.chart-area {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.chart-area img {
+/* === CHART === */
+.chart img {
   width: 100%;
-  border-radius: 15px;
+  height: auto;
+  border-radius: 8px;
 }
 
-/* === ARROWS === */
-.arrow {
-  background-color: #138987;
+/* === OPEN BUTTON === */
+.open-btn {
+  display: block;
+  margin: 2rem auto;
+  background-color: #d47b5a;
   color: white;
   border: none;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  font-size: 1.2rem;
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
+  border-radius: 8px;
   cursor: pointer;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.arrow.left { left: -25px; }
-.arrow.right { right: -25px; }
-
-.arrow:hover {
-  background-color: #0b6460;
+.open-btn:hover {
+  background-color: #b85e3e;
+  transform: scale(1.05);
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 480px) {
+/* === MOBILE === */
+@media (max-width: 600px) {
   .modal-content {
-    width: 90%;
-    padding: 1.5rem;
+    width: 95%;
+    margin: 15% auto;
   }
-
-  .arrow {
-    display: none; /* auf Handy keine Pfeile */
+  .open-btn {
+    width: 80%;
   }
 }
