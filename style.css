@@ -122,13 +122,8 @@ a:hover {
   transform: translateY(-500px);
 }
 .inseln-container {
-  position: absolute;
-  top: 50%; /* vertikal über Wellen */
-  left: 50%; /* horizontal Mitte */
-  transform: translate(-50%, -50%); /* exakte Mitte */
   display: flex;
   justify-content: center;
-  z-index: 2; /* über Wellen */
   width: 100%;
 }
 
