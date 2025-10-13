@@ -1,17 +1,21 @@
-const modal = document.getElementById("myModal");
-const btn = document.getElementById("myBtn");
-const span = document.getElementsByClassName("close")[0];
+// Elemente holen
+const modal = document.getElementById("cardModal");
+const openBtn = document.getElementById("openModalBtn");
+const closeBtn = document.querySelector(".close-btn");
 
-btn.onclick = function() {
+// Öffnen
+openBtn.onclick = function() {
   modal.style.display = "block";
-}
+};
 
-span.onclick = function() {
+// Schließen über X
+closeBtn.onclick = function() {
   modal.style.display = "none";
-}
+};
 
+// Schließen bei Klick außerhalb
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
-}
+};
