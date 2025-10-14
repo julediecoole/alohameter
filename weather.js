@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Funktion zum Laden des Charts mit optionalem Datum
   function loadChart(selectedDate = null) {
-    // === 1️⃣ Datumslogik: letzten 5 Tage inkl. ausgewähltem oder heutigem Tag ===
+    // === Datumslogik: letzten 5 Tage inkl. ausgewähltem oder heutigem Tag ===
     const endDate = selectedDate ? new Date(selectedDate) : new Date(); // Ende = gewählt oder heute
     const startDate = new Date(endDate);
     startDate.setDate(endDate.getDate() - 4); // 4 Tage zurück
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("Lade Daten von:", fullUrl);
 
-    // === 2️⃣ API-Daten laden ===
+    // === API-Daten laden ===
     fetch(fullUrl)
       .then(response => response.json())
       .then(data => {
@@ -137,10 +137,10 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch(error => console.error("Fehler beim Laden der Temperaturdaten:", error));
   }
 
-  // === 3️⃣ Initiales Laden (heute + 4 Tage zurück)
+  // === Initiales Laden (heute + 4 Tage zurück)
   loadChart();
 
-  // === 4️⃣ Eventlistener für den Datepicker-Button
+  // === Eventlistener für den Datepicker-Button
   document.getElementById("loadChartBtn").addEventListener("click", () => {
     const selectedDate = document.getElementById("startDate").value;
     if (!selectedDate) {
@@ -149,4 +149,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     loadChart(selectedDate);
   });
-}); // ← das war die fehlende Klammer!
+}); 
