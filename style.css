@@ -74,7 +74,7 @@ h2 {
   margin-bottom: -2rem;
 }
 h3 {
-  font-size: 2rem;
+  font-size: 1rem;
   text-align: center;
   line-height: 1.5;
   color: #ffffff;
@@ -159,26 +159,20 @@ a:hover {
   z-index: -2;
   transform: translateY(-500px);
 }
-
 .inseln-container {
+  position: relative;
   display: flex;
   justify-content: center;
-  width: 100%;
+  align-items: center;
+  width: 100vw;
+  overflow: visible; /* erlaubt, dass Wellen überstehen */
 }
 
-.inseln-container img {
-  width: 50%;
+.inseln-container .maps {
+  width: 50%; /* oder was du bisher hattest */
   height: auto;
-}
-
-.inseln {
-  display: flex; /* mehrere Inseln nebeneinander */
-  gap: 1rem; /* Abstand zwischen Inseln */
-}
-
-.inseln img {
-  height: 80px; /* Größe der Inseln anpassen */
-  width: auto;
+  z-index: 1; /* liegt über den Wellen */
+  position: relative;
 }
 
 /* footah */
