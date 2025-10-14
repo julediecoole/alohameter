@@ -1,46 +1,41 @@
-document.addEventListener("DOMContentLoaded", function() {
-
+document.addEventListener("DOMContentLoaded", function () {
   // === TEIL 1: AKTUELLES WETTER ===
-  const weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude=19.5481&longitude=-155.665&current_weather=true&temperature_unit=celsius&windspeed_unit=kmh&timezone=Pacific/Honolulu";
+  const weatherUrl =
+    "https://api.open-meteo.com/v1/forecast?latitude=19.5481&longitude=-155.665&current_weather=true&temperature_unit=celsius&windspeed_unit=kmh&timezone=Pacific/Honolulu";
 
   fetch(weatherUrl)
-    .then(response => response.json())
-    .then(data => {
-      const temperature = data.current_weather.temperature;
-      const windSpeed = data.current_weather.windspeed;
-
-      document.getElementById("temperature").textContent = `${temperature} °C`;
-      document.getElementById("wind_speed").textContent = `${windSpeed} km/h`;
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("temperature").textContent =
+        `${data.current_weather.temperature} °C`;
+      document.getElementById("wind_speed").textContent =
+        `${data.current_weather.windspeed} km/h`;
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Fehler beim Laden der Wetterdaten:", error);
-      document.getElementById("temperature").textContent = "Daten konnten nicht geladen werden";
-      document.getElementById("wind_speed").textContent = "Daten konnten nicht geladen werden";
     });
-
 
   // === TEIL 2: WASSERTEMPERATUR-CHART ===
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";
 
-  // Datepicker + Button auslesen
-  const startDateInput = document.getElementById("startDate");
-  const loadChartBtn = document.getElementById("loadChartBtn");
+  // Funktion zum Laden des Charts mit optionalem Datum
+  function loadChart(selectedDate = null) {
+    // === 1️⃣ Datumslogik: letzten 5 Tage inkl. ausgewähltem oder heutigem Tag ===
+    const endDate = selectedDate ? new Date(selectedDate) : new Date(); // Ende = gewählt oder heute
+    const startDate = new Date(endDate);
+    startDate.setDate(endDate.getDate() - 4); // 4 Tage zurück
 
-  // Funktion, die Chart lädt
-  function loadChart(date) {
-    const selectedDate = new Date(date);
+    // Format für PHP (YYYY-MM-DD HH:MM:SS)
+    const fromDate = `${startDate.toISOString().split("T")[0]} 00:00:00`;
+    const toDate = `${endDate.toISOString().split("T")[0]} 23:59:59`;
 
-    // 5-Tage-Zeitraum: ausgewähltes Datum + 4 Tage zurück
-    const fromDate = new Date(selectedDate);
-    fromDate.setDate(selectedDate.getDate() - 4);
+    // URL für unload.php
+    const fullUrl = `${apiUrl}?from=${encodeURIComponent(fromDate)}&to=${encodeURIComponent(toDate)}`;
 
-    const toDate = new Date(selectedDate);
+    console.log("Lade Daten von:", fullUrl);
 
-    const fromStr = fromDate.toISOString().split("T")[0] + " 00:00:00";
-    const toStr = toDate.toISOString().split("T")[0] + " 23:59:59";
-
-    // API-Aufruf mit from & to
-    fetch(`${apiUrl}?from=${fromStr}&to=${toStr}`)
+    // === 2️⃣ API-Daten laden ===
+    fetch(fullUrl)
       .then(response => response.json())
       .then(data => {
         console.log("Geladene Temperaturdaten:", data);
@@ -49,27 +44,27 @@ document.addEventListener("DOMContentLoaded", function() {
         const groupedByDay = {};
         data.forEach(item => {
           const island = item.namen;
-          const date = item.created_at.split(" ")[0]; // nur YYYY-MM-DD
+          const date = item.created_at.split(" ")[0]; // YYYY-MM-DD
           if (!groupedByDay[island]) groupedByDay[island] = {};
           if (!groupedByDay[island][date]) groupedByDay[island][date] = [];
           groupedByDay[island][date].push(parseFloat(item.temperatur));
         });
 
-        // Labels für die letzten 5 Tage erstellen
+        // Labels (Datumsliste für die letzten 5 Tage)
         const labels = [];
         for (let i = 4; i >= 0; i--) {
-          const d = new Date(selectedDate);
-          d.setDate(selectedDate.getDate() - i);
-          labels.push(d.toISOString().split("T")[0]); // YYYY-MM-DD
+          const d = new Date(endDate);
+          d.setDate(endDate.getDate() - i);
+          labels.push(d.toISOString().split("T")[0]);
         }
 
-        // Tagesdurchschnitt pro Insel berechnen
+        // Durchschnitt pro Tag & Insel
         const islands = Object.keys(groupedByDay);
         const averagedData = {};
         islands.forEach(island => {
           averagedData[island] = labels.map(date => {
             const temps = groupedByDay[island][date];
-            if (!temps || temps.length === 0) return null; // kein Wert = null
+            if (!temps || temps.length === 0) return null;
             const avg = temps.reduce((a, b) => a + b, 0) / temps.length;
             return parseFloat(avg.toFixed(2));
           });
@@ -77,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Chart vorbereiten
         const ctx = document.getElementById("wassertemperatur").getContext("2d");
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // alte Chart löschen
+        ctx.canvas.style.backgroundColor = "transparent";
 
         const islandColors = {
           Kauai: "#F9B9AA",
@@ -98,40 +93,60 @@ document.addEventListener("DOMContentLoaded", function() {
         }));
 
         const formattedLabels = labels.map(d =>
-          new Date(d).toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit"})
+          new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })
         );
 
-        // Chart erstellen
-        Chart.defaults.font.family = "Khmer MN";
-        Chart.defaults.font.size = 16; 
-        Chart.defaults.color = "#ffffff"; 
+        // Falls bereits ein Chart existiert → löschen, um doppelten Aufbau zu verhindern
+        if (window.tempChart) window.tempChart.destroy();
 
-        new Chart(ctx, {
+        Chart.defaults.font.family = "Khmer MN";
+        Chart.defaults.font.size = 16;
+        Chart.defaults.color = "#ffffff";
+
+        // Chart erstellen und speichern
+        window.tempChart = new Chart(ctx, {
           type: "line",
-          data: { labels: formattedLabels, datasets },
+          data: {
+            labels: formattedLabels,
+            datasets: datasets
+          },
           options: {
             responsive: true,
-            plugins: { legend: { position: "top" } },
+            plugins: {
+              legend: { position: "top" }
+            },
             scales: {
-              y: { min: 20, max: 30, title: { display:true, text:"Temperatur (°C)" } },
-              x: { title: { display:true, text:"Datum" } }
+              y: {
+                min: 20,
+                max: 30,
+                title: { display: true, text: "Temperatur (°C)" },
+                ticks: { color: "#ffffff" },
+                grid: { color: "rgba(255,255,255,0.26)" },
+                border: { color: "#ffffff" }
+              },
+              x: {
+                title: { display: true, text: "Datum", color: "#ffffff" },
+                ticks: { color: "#ffffff" },
+                grid: { color: "rgba(255,255,255,0.26)" },
+                border: { color: "#ffffff" }
+              }
             }
           }
         });
       })
-      .catch(err => console.error("Fehler beim Laden der Temperaturdaten:", err));
+      .catch(error => console.error("Fehler beim Laden der Temperaturdaten:", error));
   }
 
-  // Initialer Chart: letzte 5 Tage inkl. heute
-  const today = new Date();
-  const todayStr = today.toISOString().split("T")[0];
-  startDateInput.value = todayStr; // Datepicker setzen
-  loadChart(todayStr);
+  // === 3️⃣ Initiales Laden (heute + 4 Tage zurück)
+  loadChart();
 
-  // Event für den Button
-  loadChartBtn.addEventListener("click", () => {
-    const selected = startDateInput.value;
-    if (selected) loadChart(selected);
+  // === 4️⃣ Eventlistener für den Datepicker-Button
+  document.getElementById("loadChartBtn").addEventListener("click", () => {
+    const selectedDate = document.getElementById("startDate").value;
+    if (!selectedDate) {
+      alert("Bitte wähle ein Datum aus!");
+      return;
+    }
+    loadChart(selectedDate);
   });
-
-});
+}); // ← das war die fehlende Klammer!
