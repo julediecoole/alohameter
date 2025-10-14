@@ -73,6 +73,13 @@ h2 {
   color: #ffffff;
   margin-bottom: -2rem;
 }
+h3 {
+  font-size: 2rem;
+  text-align: center;
+  line-height: 1.5;
+  color: #ffffff;
+  margin: 0;
+}
 
 p {
   font-size: 2rem;
@@ -323,14 +330,14 @@ footer {
 
 .chart-container h2 {
   color: #ffffff;
-  font-family: "Khmer MN",sans-serif;
+  font-family: "Khmer MN", sans-serif;
   margin-bottom: 0.5rem;
   padding: 0;
 }
 
 .chart-container p {
   font-size: 1.5rem;
-  font-family: "Khmer MN",sans-serif;
+  font-family: "Khmer MN", sans-serif;
   color: #ffffff;
   padding: 0;
   margin-bottom: 1rem;
@@ -342,4 +349,3 @@ footer {
   display: block;
   padding: 10px;
 }
-
