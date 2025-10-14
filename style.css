@@ -160,20 +160,18 @@ a:hover {
   transform: translateY(-500px);
 }
 .inseln-container {
-  position: relative;
+  width: 100vw; /* nimmt gesamte Bildschirmbreite */
+  overflow: hidden; /* falls etwas übersteht */
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100vw;
-  overflow: visible; /* erlaubt, dass Wellen überstehen */
 }
 
-.inseln-container .maps {
-  width: 50%; /* oder was du bisher hattest */
+.inseln {
+  width: 100%;
   height: auto;
-  z-index: 1; /* liegt über den Wellen */
-  position: relative;
+  display: block;
 }
+
 
 /* footah */
 footer {
