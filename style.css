@@ -93,6 +93,11 @@ a:hover {
   z-index: -1;
   transform: translateY(-300px); /* Wolken leicht nach unten verschoben */
   animation: moveWolken 12s linear infinite; /* Animation */
+
+}
+
+.bojen {
+  
 }
 
 /* Keyframes für Bewegung von links nach rechts */
