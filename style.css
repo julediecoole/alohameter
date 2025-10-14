@@ -125,13 +125,26 @@ a:hover {
   z-index: 1;
   transform: translateY(-150px);
 }
+/* Wolken-Element */
 .wellen .wolken {
   width: 70%;
   position: absolute;
   display: block;
   z-index: -1;
-  transform: translateY(-500px);
+  transform: translateY(-100px);
+  animation: moveWolken 12s linear infinite; /* schnellere Animation */
 }
+
+/* Keyframes für Bewegung von links nach rechts */
+@keyframes moveWolken {
+  0% {
+    transform: translateX(-100%) translateY(-500px); /* Start links außerhalb */
+  }
+  100% {
+    transform: translateX(100%) translateY(-500px); /* Ende rechts außerhalb */
+  }
+}
+
 .wellen .himmel {
   width: 100%;
   position: absolute;
