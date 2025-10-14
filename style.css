@@ -125,14 +125,21 @@ a:hover {
   z-index: 1;
   transform: translateY(-150px);
 }
-
-.wellen .himmel {
-  width: 100%;
+.wellen .wolken {
+  width: 70%;
   position: absolute;
   display: block;
   z-index: -1;
   transform: translateY(-500px);
 }
+.wellen .himmel {
+  width: 100%;
+  position: absolute;
+  display: block;
+  z-index: -2;
+  transform: translateY(-500px);
+}
+
 .inseln-container {
   display: flex;
   justify-content: center;
