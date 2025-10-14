@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-  // === 🌤️ TEIL 1: AKTUELLES WETTER ===
+  // === TEIL 1: AKTUELLES WETTER ===
   const weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude=19.5481&longitude=-155.665&current_weather=true&temperature_unit=celsius&windspeed_unit=kmh&timezone=Pacific/Honolulu";
 
   fetch(weatherUrl)
@@ -18,7 +18,8 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById("wind_speed").textContent = "Daten konnten nicht geladen werden";
     });
 
-  // === 🌊 TEIL 2: WASSERTEMPERATUR-CHART ===
+
+  // === TEIL 2: WASSERTEMPERATUR-CHART ===
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";
 
   fetch(apiUrl)
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
     .then(data => {
       console.log("Geladene Temperaturdaten:", data);
 
-      // 1️⃣ Gruppieren nach Insel + Tag
+      // 1️ Gruppieren nach Insel + Tag
       // Wir erstellen ein Objekt: groupedByDay[Insel][Datum] = [alle Messungen an diesem Tag]
       const groupedByDay = {};
       data.forEach(item => {
@@ -38,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
       console.log("Nach Insel + Tag gruppiert:", groupedByDay);
 
-      // 2️⃣ Labels für die letzten 5 Tage erstellen (inkl. heute)
+      // 2 Labels für die letzten 5 Tage erstellen (inkl. heute)
       const labels = [];
       const today = new Date();
       for (let i = 4; i >= 0; i--) {
@@ -48,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
       console.log("Labels (letzte 5 Tage):", labels);
 
-      // 3️⃣ Tagesdurchschnitt pro Insel berechnen
+      // 3 Tagesdurchschnitt pro Insel berechnen
       const islands = Object.keys(groupedByDay);
       const averagedData = {};
       islands.forEach(island => {
@@ -61,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
       console.log("Durchschnitt pro Tag:", averagedData);
 
-      // 4️⃣ Chart vorbereiten
+      // 4 Chart vorbereiten
       const ctx = document.getElementById("wassertemperatur").getContext("2d");
 
       const islandColors = {
@@ -85,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
         new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })
       );
 
-      // 5️⃣ Chart erstellen
+      // 5 Chart erstellen
       new Chart(ctx, {
         type: "line",
         data: {
