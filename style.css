@@ -71,30 +71,29 @@ h2 {
   font-weight: bold;
   padding-left: 3rem;
   color: #ffffff;
+  margin-bottom: -2rem;
 }
-
 
 p {
   font-size: 2rem;
   text-align: left;
-  padding-left: 3rem;
+  padding-left: 5rem;
   line-height: 1.5;
   color: #ffffff;
+  margin: 0;
 }
 
 #weather p {
-  all: unset;               /* setzt alle globalen p-Stile zurück */
-  font-size: 2rem;          /* wendet deinen Wetterstil wieder an */
+  all: unset; /* setzt alle globalen p-Stile zurück */
+  font-size: 2rem;
   line-height: 1.5;
   color: #138987;
   padding-left: 3rem;
   padding-right: 5px;
   text-align: left;
   transform: translateY(-130px);
-  display: block;           /* nötig, da all: unset alles löscht */
+  display: block;
 }
-
-
 
 /* links */
 a {
