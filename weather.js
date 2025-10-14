@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+
   // === 🌤️ TEIL 1: AKTUELLES WETTER ===
   const weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude=19.5481&longitude=-155.665&current_weather=true&temperature_unit=celsius&windspeed_unit=kmh&timezone=Pacific/Honolulu";
 
@@ -17,28 +18,50 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById("wind_speed").textContent = "Daten konnten nicht geladen werden";
     });
 
-
   // === 🌊 TEIL 2: WASSERTEMPERATUR-CHART ===
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";
 
   fetch(apiUrl)
-    .then((response) => response.json())
-    .then((data) => {
+    .then(response => response.json())
+    .then(data => {
       console.log("Geladene Temperaturdaten:", data);
 
-      // Daten nach Inselnamen gruppieren
-      const groupedData = {};
+      // 1️⃣ Gruppieren nach Insel + Tag
+      // Wir erstellen ein Objekt: groupedByDay[Insel][Datum] = [alle Messungen an diesem Tag]
+      const groupedByDay = {};
       data.forEach(item => {
         const island = item.namen;
-        if (!groupedData[island]) groupedData[island] = [];
-        groupedData[island].push({
-          temperature_celsius: parseFloat(item.temperatur),
-          created_at: item.created_at
+        const date = item.created_at.split(" ")[0]; // nur "YYYY-MM-DD"
+        if (!groupedByDay[island]) groupedByDay[island] = {};
+        if (!groupedByDay[island][date]) groupedByDay[island][date] = [];
+        groupedByDay[island][date].push(parseFloat(item.temperatur));
+      });
+      console.log("Nach Insel + Tag gruppiert:", groupedByDay);
+
+      // 2️⃣ Labels für die letzten 5 Tage erstellen (inkl. heute)
+      const labels = [];
+      const today = new Date();
+      for (let i = 4; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        labels.push(d.toISOString().split("T")[0]); // "YYYY-MM-DD"
+      }
+      console.log("Labels (letzte 5 Tage):", labels);
+
+      // 3️⃣ Tagesdurchschnitt pro Insel berechnen
+      const islands = Object.keys(groupedByDay);
+      const averagedData = {};
+      islands.forEach(island => {
+        averagedData[island] = labels.map(date => {
+          const temps = groupedByDay[island][date];
+          if (!temps || temps.length === 0) return null; // leerer Punkt
+          const avg = temps.reduce((a, b) => a + b, 0) / temps.length;
+          return parseFloat(avg.toFixed(2));
         });
       });
+      console.log("Durchschnitt pro Tag:", averagedData);
 
-      console.log("Gruppierte Daten:", groupedData);
-
+      // 4️⃣ Chart vorbereiten
       const ctx = document.getElementById("wassertemperatur").getContext("2d");
 
       const islandColors = {
@@ -48,33 +71,32 @@ document.addEventListener("DOMContentLoaded", function() {
         "Big Island": "#BCEEFF"
       };
 
-      // Labels (Datum)
-      const firstIsland = Object.keys(groupedData)[0];
-      const labels = groupedData[firstIsland].map((item) =>
-        new Date(item.created_at).toLocaleDateString("de-DE", {
-          day: "2-digit",
-          month: "2-digit"
-        })
-      );
-
-      // Datensätze erstellen
-      const datasets = Object.keys(groupedData).map((island) => ({
+      const datasets = islands.map(island => ({
         label: island,
-        data: groupedData[island].map((item) => item.temperature_celsius),
+        data: averagedData[island],
         borderColor: islandColors[island] || "#888",
         backgroundColor: (islandColors[island] || "#888") + "55",
         fill: true,
-        tension: 0.3
+        tension: 0.3,
+        spanGaps: true // verbindet Linien über null hinweg
       }));
 
+      const formattedLabels = labels.map(d =>
+        new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })
+      );
+
+      // 5️⃣ Chart erstellen
       new Chart(ctx, {
         type: "line",
-        data: { labels, datasets },
+        data: {
+          labels: formattedLabels,
+          datasets: datasets
+        },
         options: {
           responsive: true,
           plugins: {
             legend: { position: "top" },
-            title: { display: true, text: "Wassertemperaturen der Woche (°C)" }
+            title: { display: true, text: "Wassertemperaturen – Tagesdurchschnitt letzte 5 Tage" }
           },
           scales: {
             y: {
@@ -88,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
           }
         }
       });
+
     })
-    .catch((error) => console.error("Fehler beim Laden der Temperaturdaten:", error));
+    .catch(error => console.error("Fehler beim Laden der Temperaturdaten:", error));
 });
