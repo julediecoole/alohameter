@@ -19,99 +19,128 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 
-  // === TEIL 2: WASSERTEMPERATUR-CHART ===
-  const apiUrl = "https://alohameter.melinagast.ch/unload.php";
+// === TEIL 2: WASSERTEMPERATUR-CHART ===
+const apiUrl = "https://alohameter.melinagast.ch/unload.php";
 
-  fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      console.log("Geladene Temperaturdaten:", data);
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    console.log("Geladene Temperaturdaten:", data);
 
-      // 1️ Gruppieren nach Insel + Tag
-      // Wir erstellen ein Objekt: groupedByDay[Insel][Datum] = [alle Messungen an diesem Tag]
-      const groupedByDay = {};
-      data.forEach(item => {
-        const island = item.namen;
-        const date = item.created_at.split(" ")[0]; // nur "YYYY-MM-DD"
-        if (!groupedByDay[island]) groupedByDay[island] = {};
-        if (!groupedByDay[island][date]) groupedByDay[island][date] = [];
-        groupedByDay[island][date].push(parseFloat(item.temperatur));
+    // 1️ Gruppieren nach Insel + Tag
+    const groupedByDay = {};
+    data.forEach(item => {
+      const island = item.namen;
+      const date = item.created_at.split(" ")[0]; // nur "YYYY-MM-DD"
+      if (!groupedByDay[island]) groupedByDay[island] = {};
+      if (!groupedByDay[island][date]) groupedByDay[island][date] = [];
+      groupedByDay[island][date].push(parseFloat(item.temperatur));
+    });
+
+    // 2 Labels für die letzten 5 Tage erstellen (inkl. heute)
+    const labels = [];
+    const today = new Date();
+    for (let i = 4; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      labels.push(d.toISOString().split("T")[0]); // "YYYY-MM-DD"
+    }
+
+    // 3 Tagesdurchschnitt pro Insel berechnen
+    const islands = Object.keys(groupedByDay);
+    const averagedData = {};
+    islands.forEach(island => {
+      averagedData[island] = labels.map(date => {
+        const temps = groupedByDay[island][date];
+        if (!temps || temps.length === 0) return null;
+        const avg = temps.reduce((a, b) => a + b, 0) / temps.length;
+        return parseFloat(avg.toFixed(2));
       });
-      console.log("Nach Insel + Tag gruppiert:", groupedByDay);
+    });
 
-      // 2 Labels für die letzten 5 Tage erstellen (inkl. heute)
-      const labels = [];
-      const today = new Date();
-      for (let i = 4; i >= 0; i--) {
-        const d = new Date(today);
-        d.setDate(today.getDate() - i);
-        labels.push(d.toISOString().split("T")[0]); // "YYYY-MM-DD"
-      }
-      console.log("Labels (letzte 5 Tage):", labels);
+    // 4 Chart vorbereiten
+    const ctx = document.getElementById("wassertemperatur").getContext("2d");
+    ctx.canvas.style.backgroundColor = "transparent"; // Hintergrund durchsichtig
 
-      // 3 Tagesdurchschnitt pro Insel berechnen
-      const islands = Object.keys(groupedByDay);
-      const averagedData = {};
-      islands.forEach(island => {
-        averagedData[island] = labels.map(date => {
-          const temps = groupedByDay[island][date];
-          if (!temps || temps.length === 0) return null; // leerer Punkt
-          const avg = temps.reduce((a, b) => a + b, 0) / temps.length;
-          return parseFloat(avg.toFixed(2));
-        });
-      });
-      console.log("Durchschnitt pro Tag:", averagedData);
+    const islandColors = {
+      Kauai: "#F9B9AA",
+      Maui: "#138987",
+      Oahu: "#E17F69",
+      "Big Island": "#BCEEFF"
+    };
 
-      // 4 Chart vorbereiten
-      const ctx = document.getElementById("wassertemperatur").getContext("2d");
+  const datasets = islands.map(island => ({
+  label: island,
+  data: averagedData[island],
+  borderColor: islandColors[island] || "#FFFFFF", // nimmt die Insel-Farbe
+  
+  fill: false,                                    // nur Linien, keine Fläche
+  tension: 0.5,
+  spanGaps: true,
+  pointBackgroundColor: islandColors[island] || "#FFFFFF", // Tooltip Punktfarbe
+  pointBorderColor: islandColors[island] || "#FFFFFF"
+}));
 
-      const islandColors = {
-        Kauai: "#F9B9AA",
-        Maui: "#138987",
-        Oahu: "#E17F69",
-        "Big Island": "#BCEEFF"
-      };
 
-      const datasets = islands.map(island => ({
-        label: island,
-        data: averagedData[island],
-        borderColor: islandColors[island] || "#ffffffff",
-        backgroundColor: (islandColors[island] || "#ffffffff") + "55",
-        fill: true,
-        tension: 0.3,
-        spanGaps: true // verbindet Linien über null hinweg
-      }));
+    const formattedLabels = labels.map(d =>
+      new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })
+    );
 
-      const formattedLabels = labels.map(d =>
-        new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })
-      );
+    // 5 Chart erstellen
+    Chart.defaults.font.family = "Khmer MN";
+    Chart.defaults.font.size = 16; 
+    Chart.defaults.color = "#ffffff"; 
 
-      // 5 Chart erstellen
-      new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: formattedLabels,
-          datasets: datasets
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: "top" },
-            title: { display: true, text: "Wassertemperaturen – Tagesdurchschnitt letzte 5 Tage" }
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: formattedLabels,
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "top",
           },
-          scales: {
-            y: {
-              min: 20,
-              max: 30,
-              title: { display: true, text: "Temperatur (°C)" }
-            },
-            x: {
-              title: { display: true, text: "Datum" }
-            }
-          }
-        }
-      });
+  
+        },
+        scales: {
+  y: {
+    min: 20,
+    max: 30,
+    title: {
+      display: true,
+      text: "Temperatur (°C)",
+    },
+    ticks: {
+      color: "#ffffff",
+    },
+    grid: {
+      color: "rgba(255, 255, 255, 0.26)"
 
-    })
-    .catch(error => console.error("Fehler beim Laden der Temperaturdaten:", error));
+    },
+    border: { color: "#ffffff" }
+  },
+  x: {
+    title: {
+      display: true,
+      text: "Datum",
+      color: "#ffffff",
+    },
+    ticks: {
+      color: "#ffffff",
+  
+    },
+    grid: {
+      color: "rgba(255, 255, 255, 0.26)"
+    },
+    border: { color: "#ffffff" }
+  }
+}
+
+      }
+    });
+  })
+  .catch(error => console.error("Fehler beim Laden der Temperaturdaten:", error));
 });
