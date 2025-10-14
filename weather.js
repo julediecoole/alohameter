@@ -75,8 +75,8 @@ document.addEventListener("DOMContentLoaded", function() {
       const datasets = islands.map(island => ({
         label: island,
         data: averagedData[island],
-        borderColor: islandColors[island] || "#888",
-        backgroundColor: (islandColors[island] || "#888") + "55",
+        borderColor: islandColors[island] || "#ffffffff",
+        backgroundColor: (islandColors[island] || "#ffffffff") + "55",
         fill: true,
         tension: 0.3,
         spanGaps: true // verbindet Linien über null hinweg
