@@ -303,14 +303,14 @@ footer {
 
 .chart-container h2 {
   color: #ffffff;
-  font-family: "Khmer MN";
+  font-family: "Khmer MN",sans-serif;
   margin-bottom: 0.5rem;
   padding: 0;
 }
 
 .chart-container p {
   font-size: 1.5rem;
-  font-family: "Khmer MN";
+  font-family: "Khmer MN",sans-serif;
   color: #ffffff;
   padding: 0;
   margin-bottom: 1rem;
@@ -322,3 +322,4 @@ footer {
   display: block;
   padding: 10px;
 }
+
