@@ -91,19 +91,21 @@ a:hover {
   position: absolute;
   display: block;
   z-index: -1;
-  transform: translateY(-100px);
-  animation: moveWolken 12s linear infinite; /* schnellere Animation */
+  transform: translateY(-300px); /* Wolken leicht nach unten verschoben */
+  animation: moveWolken 12s linear infinite; /* Animation */
 }
 
 /* Keyframes für Bewegung von links nach rechts */
 @keyframes moveWolken {
   0% {
-    transform: translateX(-100%) translateY(-500px); /* Start links außerhalb */
+    transform: translateX(-120%) translateY(-450px); /* Start links außerhalb */
   }
   100% {
-    transform: translateX(100%) translateY(-500px); /* Ende rechts außerhalb */
+    transform: translateX(150%) translateY(-450px); /* Ende rechts außerhalb */
   }
 }
+
+
 
 .wellen .himmel {
   width: 100%;
