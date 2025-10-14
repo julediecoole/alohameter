@@ -81,16 +81,19 @@ document.addEventListener("DOMContentLoaded", function () {
           "Big Island": "#BCEEFF"
         };
 
-        const datasets = islands.map(island => ({
-          label: island,
-          data: averagedData[island],
-          borderColor: islandColors[island] || "#FFFFFF",
-          fill: false,
-          tension: 0.5,
-          spanGaps: true,
-          pointBackgroundColor: islandColors[island] || "#FFFFFF",
-          pointBorderColor: islandColors[island] || "#FFFFFF"
-        }));
+       const datasets = islands.map(island => ({
+        label: island,
+        data: averagedData[island],
+        borderColor: islandColors[island] || "#FFFFFF",
+        fill: false,
+        tension: 0.5,
+        spanGaps: true,
+        backgroundColor: islandColors[island] || "#FFFFFF", // Füllt das Legendensymbol
+        pointStyle: 'rect', // Quadrat, für Kreis 'circle'
+        pointRadius: 6,      // Größe der Punkte
+        pointBorderColor: islandColors[island] || "#FFFFFF",
+        pointBackgroundColor: islandColors[island] || "#FFFFFF"
+    }));
 
         const formattedLabels = labels.map(d =>
           new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })
