@@ -296,17 +296,16 @@ footer {
 
 /* ===  WASSERTEMPERATUR-CHART === */
 .chart-container {
-  width: 90%; /* nimmt 90% der Bildschirmbreite ein */
+  width: 100%; /* nimmt 90% der Bildschirmbreite ein */
   max-width: 1000px; /* wird nie breiter als 900px */
-  margin: 4rem auto; /* zentriert das Chart-Element und fügt Abstand hinzu */
+  margin: 3rem auto; /* zentriert das Chart-Element und fügt Abstand hinzu */
 }
 
 .chart-container h2 {
   color: #ffffff;
   font-family: "Khmer MN";
-  font-size: 4rem; /* etwas kleiner, damit es harmoniert */
   margin-bottom: 0.5rem;
-  padding: 0; /* überschreibt dein globales padding-left */
+  padding: 0;
 }
 
 .chart-container p {
