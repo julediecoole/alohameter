@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // === Datumslogik: letzten 5 Tage inkl. ausgewähltem oder heutigem Tag ===
     const endDate = selectedDate ? new Date(selectedDate) : new Date(); // Ende = gewählt oder heute
     const startDate = new Date(endDate);
-    startDate.setDate(endDate.getDate() - 4); // 4 Tage zurück
+    startDate.setDate(endDate.getDate() - 6); // 4 Tage zurück
 
     // Format für PHP (YYYY-MM-DD HH:MM:SS)
     const fromDate = `${startDate.toISOString().split("T")[0]} 00:00:00`;
