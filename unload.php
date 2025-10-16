@@ -26,7 +26,7 @@ try {
 
     // =====================================
     // Fallback: wenn kein Datum gesetzt
-    // → Standard = letzte 5 Tage
+    // → Standard = letzte 7 Tage
     // =====================================
     $today = new DateTime();
     $default_from = (clone $today)->modify('-6 days')->format('Y-m-d 00:00:00'); 
