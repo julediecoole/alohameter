@@ -42,11 +42,11 @@ try {
     // 6) Datensätze einfügen
    foreach ($dataArray as $item) {
     $stmt->execute([
-        $item['bojen_id'] ?? 404,
-        $item['wellenhoehe'] ?? 404,
-        $item['wellenabstand'] ?? 404,
-        $item['temperatur'] ?? 404,
-        $item['wind'] ?? 404
+        $item['bojen_id'] ?? null,
+        $item['wellenhoehe'] ?? null,
+        $item['wellenabstand'] ?? null,
+        $item['temperatur'] ?? null,
+        $item['wind'] ?? null
     ]);
 }
 

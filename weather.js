@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // === Datumslogik: letzten 5 Tage inkl. ausgewähltem oder heutigem Tag ===
     const endDate = selectedDate ? new Date(selectedDate) : new Date(); // Ende = gewählt oder heute
     const startDate = new Date(endDate);
-    startDate.setDate(endDate.getDate() - 4); // 4 Tage zurück
+    startDate.setDate(endDate.getDate() - 6); // 6 Tage zurück
 
     // Format für PHP (YYYY-MM-DD HH:MM:SS)
     const fromDate = `${startDate.toISOString().split("T")[0]} 00:00:00`;
@@ -50,22 +50,25 @@ document.addEventListener("DOMContentLoaded", function () {
           groupedByDay[island][date].push(parseFloat(item.temperatur));
         });
 
-        // Labels (Datumsliste für die letzten 5 Tage)
+        // Labels (Datumsliste für die letzten 7 Tage)
         const labels = [];
-        for (let i = 4; i >= 0; i--) {
+        for (let i = 6; i >= 0; i--) {
           const d = new Date(endDate);
           d.setDate(endDate.getDate() - i);
           labels.push(d.toISOString().split("T")[0]);
         }
 
-        // Durchschnitt pro Tag & Insel
+        // Durchschnitt pro Tag & Insel (ignoriere null oder ungültige Werte)
         const islands = Object.keys(groupedByDay);
         const averagedData = {};
         islands.forEach(island => {
           averagedData[island] = labels.map(date => {
             const temps = groupedByDay[island][date];
-            if (!temps || temps.length === 0) return null;
-            const avg = temps.reduce((a, b) => a + b, 0) / temps.length;
+            if (!temps || temps.length === 0) return null; // kein Eintrag
+             // Nur gültige Zahlen (nicht null, NaN etc.)
+            const validTemps = temps.filter(t => typeof t === "number" && !isNaN(t));
+            if (validTemps.length === 0) return null; // alle Werte ungültig → leer anzeigen
+            const avg = validTemps.reduce((a, b) => a + b, 0) / validTemps.length;
             return parseFloat(avg.toFixed(2));
           });
         });
