@@ -160,7 +160,8 @@ a:hover {
 }
 
 /* Sicherheitsregel für Browser, die drop-shadow abschneiden */
-svg,img.boje-icon {
+svg,
+img.boje-icon {
   overflow: visible !important;
 }
 
@@ -182,8 +183,6 @@ footer {
   font-size: 0.9rem;
   color: white;
 }
-
-
 
 /* === WASSERTEMPERATUR-CHART === */
 .chart-container {
@@ -275,6 +274,119 @@ footer {
 #loadChartBtn:hover {
   background-color: #b85e3e;
   transform: scale(1.05);
+}
+
+/* === POPUP === */
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Inhalt der Karte */
+.popup-content {
+  background: white;
+  width: 800px;
+  height: 700px;
+  overflow: visible;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Header */
+.header {
+  background-color: #c96b52;
+  color: white;
+  padding: 20px 0px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 3rem;
+  text-align: center;
+}
+
+.header span {
+  font-size: 1.5rem;
+  margin-left: 5px;
+}
+
+/* Diagrammteil */
+.body {
+  padding: 16px;
+  text-align: center;
+  position: relative;
+}
+
+.wind-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #1b7a7f;
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.chart {
+  width: 100%;
+  height: auto;
+}
+
+/* Navigationspfeile */
+.arrow {
+  position: absolute;
+  top: 400%;
+  transform: translateY(-50%);
+  background: #c96b52;
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+.arrow.left {
+  left: -20px;
+}
+.arrow.right {
+  right: -20px;
+}
+
+/* Schliessen-Button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 4rem;
+  cursor: pointer;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* === MOBILE === */
