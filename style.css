@@ -215,6 +215,18 @@ footer {
   padding: 10px;
 }
 
+/* === KAUAI-CHARTS === */
+#kauai-charts {
+  margin-top: 3rem;
+}
+
+#kauai-charts canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 500px;
+  margin-bottom: 2rem;
+}
+
 /* === DATEPICKER === */
 .chart-datepicker {
   display: flex;
