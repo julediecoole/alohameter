@@ -140,22 +140,22 @@ a:hover {
 
 /* Individuelle Bojenpositionen */
 .boje-icon:nth-child(1) {
-  top: 23%;
+  top: 16%;
   left: 28%;
 }
 
 .boje-icon:nth-child(2) {
-  top: 32%;
+  top: 21%;
   left: 44%;
 }
 
 .boje-icon:nth-child(3) {
-  top: 35%;
+  top: 27%;
   left: 63%;
 }
 
 .boje-icon:nth-child(4) {
-  top: 50%;
+  top: 34%;
   left: 66%;
 }
 
@@ -174,96 +174,6 @@ img.boje-icon {
     transform: translateX(150%) translateY(-450px); /* Ende rechts außerhalb */
   }
 }
-
-/* footah */
-footer {
-  text-align: center;
-  padding: 1rem;
-  margin-top: 3rem;
-  font-size: 0.9rem;
-  color: white;
-}
-
-/* === WASSERTEMPERATUR-CHART === */
-.chart-container {
-  width: 95%;
-  max-width: 1000px;
-  margin: 3rem auto;
-}
-
-.chart-container h2 {
-  color: #ffffff;
-  font-family: "Khmer MN", sans-serif;
-  padding: 0;
-  font-size: 6rem; /* Originalgröße */
-}
-
-.chart-container p {
-  font-size: 1.5rem;
-  font-family: "Khmer MN", sans-serif;
-  color: #ffffff;
-  padding: 0;
-  margin-bottom: 1rem;
-}
-
-.chart-container canvas {
-  width: 100% !important;
-  height: auto !important; /* Höhe passt sich proportional an */
-  max-height: 500px;
-  display: block;
-  padding: 10px;
-}
-
-/* === DATEPICKER === */
-.chart-datepicker {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.3rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap; /* Zeilenumbruch bei sehr kleinen Bildschirmen */
-}
-
-.chart-datepicker label {
-  color: #ffffff;
-  font-family: "Khmer MN", sans-serif;
-  font-size: 1.5rem;
-}
-
-.chart-datepicker input[type="date"] {
-  background-color: #ffffff; /* weiße Box bleibt */
-  color: #0a5f5d;
-  border: none;
-  padding: 0.1rem 0.5rem;
-  font-size: 1rem;
-  font-family: "Khmer MN", sans-serif;
-  cursor: pointer;
-  width: auto; /* keine erzwungene Breite */
-}
-
-/* Hover- & Fokus-Effekt */
-.chart-datepicker input[type="date"]:hover,
-.chart-datepicker input[type="date"]:focus {
-  outline: none;
-  color: #0a5f5d;
-}
-
-#loadChartBtn {
-  background-color: #d47b5a;
-  color: white;
-  border: none;
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
-  font-family: "Khmer MN", sans-serif;
-  cursor: pointer;
-}
-
-#loadChartBtn:hover {
-  background-color: #b85e3e;
-  transform: scale(1.05);
-}
-
 /* === POPUP === */
 .popup {
   display: none;
@@ -375,6 +285,95 @@ footer {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* === TEMPERATUR-CHART === */
+.chart-container {
+  width: 95%;
+  max-width: 1000px;
+  margin: 3rem auto;
+}
+
+.chart-container h2 {
+  color: #ffffff;
+  font-family: "Khmer MN", sans-serif;
+  padding: 0;
+  font-size: 6rem; /* Originalgröße */
+}
+
+.chart-container p {
+  font-size: 1.5rem;
+  font-family: "Khmer MN", sans-serif;
+  color: #ffffff;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: auto !important; /* Höhe passt sich proportional an */
+  max-height: 500px;
+  display: block;
+  padding: 10px;
+}
+
+/* === DATEPICKER === */
+.chart-datepicker {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap; /* Zeilenumbruch bei sehr kleinen Bildschirmen */
+}
+
+.chart-datepicker label {
+  color: #ffffff;
+  font-family: "Khmer MN", sans-serif;
+  font-size: 1.5rem;
+}
+
+.chart-datepicker input[type="date"] {
+  background-color: #ffffff; /* weiße Box bleibt */
+  color: #0a5f5d;
+  border: none;
+  padding: 0.1rem 0.5rem;
+  font-size: 1rem;
+  font-family: "Khmer MN", sans-serif;
+  cursor: pointer;
+  width: auto; /* keine erzwungene Breite */
+}
+
+/* Hover- & Fokus-Effekt */
+.chart-datepicker input[type="date"]:hover,
+.chart-datepicker input[type="date"]:focus {
+  outline: none;
+  color: #0a5f5d;
+}
+
+#loadChartBtn {
+  background-color: #d47b5a;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  font-family: "Khmer MN", sans-serif;
+  cursor: pointer;
+}
+
+#loadChartBtn:hover {
+  background-color: #b85e3e;
+  transform: scale(1.05);
+}
+
+/* footah */
+footer {
+  text-align: center;
+  padding: 1rem;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  color: white;
 }
 
 /* === MOBILE === */

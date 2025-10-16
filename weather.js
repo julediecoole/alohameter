@@ -19,28 +19,28 @@ document.addEventListener("DOMContentLoaded", function () {
 const bojen = document.querySelectorAll('.boje-icon');
 
 bojen.forEach(boje => {
-  const popupId = boje.getAttribute('data-popup');
+  const popupId = boje.dataset.popup; // data-popup auslesen
   const popup = document.getElementById(popupId);
 
   if (!popup) return;
 
   // Öffnen
   boje.addEventListener('click', () => {
-    popup.classList.add('show');
+    popup.style.display = 'flex'; // Popup sichtbar machen
   });
 
-  // Schliessen via Button
+  // Schließen via Button
   const closeBtn = popup.querySelector('.close-btn');
   closeBtn.addEventListener('click', () => {
-    popup.classList.remove('show');
-    setTimeout(() => (popup.style.display = 'none'), 300);
+    popup.style.display = 'none';
   });
 
-  // Schliessen durch Klick ausserhalb
+  // Schließen durch Klick außerhalb
   popup.addEventListener('click', (e) => {
-    if (e.target === popup) popup.classList.remove('show');
+    if (e.target === popup) popup.style.display = 'none';
   });
 });
+
 
 
   // === TEIL 3: TEMPERATUR-CHART ===
