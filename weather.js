@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch(error => console.error("Fehler beim Laden der Temperaturdaten:", error));
   }
 
-  // === Initiales Laden (heute + 4 Tage zurück)
+  // === Initiales Laden (heute + 6 Tage zurück)
   loadChart();
 
   // === Eventlistener für den Datepicker-Button
