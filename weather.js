@@ -15,7 +15,35 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Fehler beim Laden der Wetterdaten:", error);
     });
 
-  // === TEIL 2: WASSERTEMPERATUR-CHART ===
+  // === TEIL 2: POPUP ===// === Popup-Logik für alle Bojen ===
+const bojen = document.querySelectorAll('.boje-icon');
+
+bojen.forEach(boje => {
+  const popupId = boje.getAttribute('data-popup');
+  const popup = document.getElementById(popupId);
+
+  if (!popup) return;
+
+  // Öffnen
+  boje.addEventListener('click', () => {
+    popup.classList.add('show');
+  });
+
+  // Schliessen via Button
+  const closeBtn = popup.querySelector('.close-btn');
+  closeBtn.addEventListener('click', () => {
+    popup.classList.remove('show');
+    setTimeout(() => (popup.style.display = 'none'), 300);
+  });
+
+  // Schliessen durch Klick ausserhalb
+  popup.addEventListener('click', (e) => {
+    if (e.target === popup) popup.classList.remove('show');
+  });
+});
+
+
+  // === TEIL 3: TEMPERATUR-CHART ===
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";
 
   // Funktion zum Laden des Charts mit optionalem Datum
