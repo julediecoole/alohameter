@@ -184,8 +184,8 @@ bojen.forEach(boje => {
     loadChart(selectedDate);
   });
 
-  // === TEIL 3: KAUAI DIAGRAMME (48h, 6-Stunden-Intervalle) ===
-  function loadKauaiCharts() {
+  // === TEIL 4: DIAGRAMME FÜR ALLE INSELN (48h, 6-Stunden-Intervalle) ===
+  function loadIslandCharts() {
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";
   
   const now = new Date();
@@ -197,146 +197,148 @@ bojen.forEach(boje => {
   fetch(`${apiUrl}?from=${encodeURIComponent(fromDate)}&to=${encodeURIComponent(toDate)}`)
     .then(res => res.json())
     .then(data => {
-      const kauaiData = data.filter(d => d.namen === "Kauai");
-      
-      // 6-Stunden-Intervalle erstellen
-      const intervals = {};
-      kauaiData.forEach(d => {
-        const dateObj = new Date(d.created_at);
-        const hour = dateObj.getHours();
-        const roundedHour = Math.floor(hour / 6) * 6;
-        const key = `${dateObj.toISOString().split("T")[0]} ${String(roundedHour).padStart(2,'0')}:00`;
-
-        if (!intervals[key]) intervals[key] = { wellenhoehe: [], wellenabstand: [], wind: [] };
-        intervals[key].wellenhoehe.push(parseFloat(d.wellenhoehe));
-        intervals[key].wellenabstand.push(parseFloat(d.wellenabstand));
-        intervals[key].wind.push(parseFloat(d.wind));
-      });
-
-      const sortedKeys = Object.keys(intervals).sort();
-      const avg = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
-
-      // X-Achse: nur Uhrzeit (HH:00)
-      const labels = sortedKeys.map(k => {
-        const dateObj = new Date(k);
-        return `${String(dateObj.getHours()).padStart(2,'0')}:00`;
-      });
-
-      const wellenhoeheData = sortedKeys.map(k => parseFloat(avg(intervals[k].wellenhoehe).toFixed(2)));
-      const wellenabstandData = sortedKeys.map(k => parseFloat(avg(intervals[k].wellenabstand).toFixed(2)));
-      const windData = sortedKeys.map(k => parseFloat(avg(intervals[k].wind).toFixed(2)));
-
-      // --- Gemeinsame Chart-Optionen für weißen Look ---
-      const chartOptions = {
-        responsive: true,
-        plugins: { legend: { display: false } }, // Kein Label oben
-        scales: {
-          y: {
-            ticks: { color: "#ffffff" },
-            grid: { color: "rgba(255,255,255,0.26)" },
-            border: { color: "#ffffff" }
-          },
-          x: {
-            ticks: { color: "#ffffff" },
-            grid: { color: "rgba(255,255,255,0.26)" },
-            border: { color: "#ffffff" }
-          }
-        }
+      const islands = ["Kauai", "Oahu", "Maui", "Big Island"];
+      const islandColors = {
+        Kauai: "#F9B9AA",
+        Oahu: "#E17F69",
+        Maui: "#138987",
+        "Big Island": "#BCEEFF"
       };
 
-      // --- Wellenhöhe ---
-      const ctxH = document.getElementById("kauai-wellen").getContext("2d");
-      ctxH.canvas.style.backgroundColor = "transparent";
-      if(window.kauaiWellenhoeheChart) window.kauaiWellenhoeheChart.destroy();
-      window.kauaiWellenhoeheChart = new Chart(ctxH, {
-        type: 'line',
-        data: { 
-          labels, 
-          datasets: [{
-            label: 'Wellenhöhe (m)',
-            data: wellenhoeheData,
-            borderColor: "#F9B9AA",
-            fill: false,
-            tension: 0.5,
-            pointStyle: 'rect',
-            pointRadius: 6,
-            pointBackgroundColor: "#F9B9AA",
-            pointBorderColor: "#F9B9AA"
-          }]
-        },
-        options: {
-          ...chartOptions,
-          scales: {
-            ...chartOptions.scales,
-            y: { ...chartOptions.scales.y, min: 0, max: 10, title: { display: true, text: 'Wellenhöhe (m)', color: "#ffffff" } }
-          }
-        }
-      });
+      islands.forEach(island => {
+        const islandData = data.filter(d => d.namen === island);
 
-      // --- Wellenabstand ---
-      const ctxA = document.getElementById("kauai-wellenabstand").getContext("2d");
-      ctxA.canvas.style.backgroundColor = "transparent";
-      if(window.kauaiWellenabstandChart) window.kauaiWellenabstandChart.destroy();
-      window.kauaiWellenabstandChart = new Chart(ctxA, {
-        type: 'line',
-        data: { 
-          labels, 
-          datasets: [{
-            label: 'Wellenabstand (m)',
-            data: wellenabstandData,
-            borderColor: "#F9B9AA",
-            fill: false,
-            tension: 0.5,
-            pointStyle: 'rect',
-            pointRadius: 6,
-            pointBackgroundColor: "#F9B9AA",
-            pointBorderColor: "#F9B9AA"
-          }]
-        },
-        options: {
-          ...chartOptions,
-          scales: {
-            ...chartOptions.scales,
-            y: { ...chartOptions.scales.y, min: 0, max: 20, title: { display: true, text: 'Wellenabstand (m)', color: "#ffffff" } }
-          }
-        }
-      });
+        const intervals = {};
+        islandData.forEach(d => {
+          const dateObj = new Date(d.created_at);
+          const hour = dateObj.getHours();
+          const roundedHour = Math.floor(hour / 6) * 6;
+          const key = `${dateObj.toISOString().split("T")[0]} ${String(roundedHour).padStart(2,'0')}:00`;
 
-      // --- Wind ---
-      const ctxW = document.getElementById("kauai-wind").getContext("2d");
-      ctxW.canvas.style.backgroundColor = "transparent";
-      if(window.kauaiWindChart) window.kauaiWindChart.destroy();
-      window.kauaiWindChart = new Chart(ctxW, {
-        type: 'line',
-        data: { 
-          labels, 
-          datasets: [{
-            label: 'Wind (kn)',
-            data: windData,
-            borderColor: "#F9B9AA",
-            fill: false,
-            tension: 0.5,
-            pointStyle: 'rect',
-            pointRadius: 6,
-            pointBackgroundColor: "#F9B9AA",
-            pointBorderColor: "#F9B9AA"
-          }]
-        },
-        options: {
-          ...chartOptions,
+          if (!intervals[key]) intervals[key] = { wellenhoehe: [], wellenabstand: [], wind: [] };
+          intervals[key].wellenhoehe.push(parseFloat(d.wellenhoehe));
+          intervals[key].wellenabstand.push(parseFloat(d.wellenabstand));
+          intervals[key].wind.push(parseFloat(d.wind));
+        });
+
+        const sortedKeys = Object.keys(intervals).sort();
+        const avg = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
+        const labels = sortedKeys.map(k => {
+          const dateObj = new Date(k);
+          return `${String(dateObj.getHours()).padStart(2,'0')}:00`;
+        });
+
+        const wellenhoeheData = sortedKeys.map(k => parseFloat(avg(intervals[k].wellenhoehe).toFixed(2)));
+        const wellenabstandData = sortedKeys.map(k => parseFloat(avg(intervals[k].wellenabstand).toFixed(2)));
+        const windData = sortedKeys.map(k => parseFloat(avg(intervals[k].wind).toFixed(2)));
+
+        const chartOptions = {
+          responsive: true,
+          plugins: { legend: { display: false } },
           scales: {
-            ...chartOptions.scales,
-            y: { ...chartOptions.scales.y, min: 0, max: 35, title: { display: true, text: 'Wind (kn)', color: "#ffffff" } }
+            y: { ticks: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.26)" }, border: { color: "#ffffff" } },
+            x: { ticks: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.26)" }, border: { color: "#ffffff" } }
           }
-        }
+        };
+
+        // ID sauber machen (Leerzeichen entfernen)
+        const islandId = island.toLowerCase().replace(/\s/g, '');
+
+        // --- Wellenhöhe ---
+        const ctxH = document.getElementById(`${islandId}-wellen`).getContext("2d");
+        ctxH.canvas.style.backgroundColor = "transparent";
+        if(window[`${islandId}WellenhoeheChart`]) window[`${islandId}WellenhoeheChart`].destroy();
+        window[`${islandId}WellenhoeheChart`] = new Chart(ctxH, {
+          type: 'line',
+          data: { 
+            labels, 
+            datasets: [{
+              label: 'Wellenhöhe (m)',
+              data: wellenhoeheData,
+              borderColor: islandColors[island],
+              fill: false,
+              tension: 0.5,
+              pointStyle: 'rect',
+              pointRadius: 6,
+              pointBackgroundColor: islandColors[island],
+              pointBorderColor: islandColors[island]
+            }]
+          },
+          options: {
+            ...chartOptions,
+            scales: {
+              ...chartOptions.scales,
+              y: { ...chartOptions.scales.y, min: 0, max: 10, title: { display: true, text: 'Wellenhöhe (m)', color: "#ffffff" } }
+            }
+          }
+        });
+
+        // --- Wellenabstand ---
+        const ctxA = document.getElementById(`${islandId}-wellenabstand`).getContext("2d");
+        ctxA.canvas.style.backgroundColor = "transparent";
+        if(window[`${islandId}WellenabstandChart`]) window[`${islandId}WellenabstandChart`].destroy();
+        window[`${islandId}WellenabstandChart`] = new Chart(ctxA, {
+          type: 'line',
+          data: { 
+            labels, 
+            datasets: [{
+              label: 'Wellenabstand (m)',
+              data: wellenabstandData,
+              borderColor: islandColors[island],
+              fill: false,
+              tension: 0.5,
+              pointStyle: 'rect',
+              pointRadius: 6,
+              pointBackgroundColor: islandColors[island],
+              pointBorderColor: islandColors[island]
+            }]
+          },
+          options: {
+            ...chartOptions,
+            scales: {
+              ...chartOptions.scales,
+              y: { ...chartOptions.scales.y, min: 0, max: 20, title: { display: true, text: 'Wellenabstand (m)', color: "#ffffff" } }
+            }
+          }
+        });
+
+        // --- Wind ---
+        const ctxW = document.getElementById(`${islandId}-wind`).getContext("2d");
+        ctxW.canvas.style.backgroundColor = "transparent";
+        if(window[`${islandId}WindChart`]) window[`${islandId}WindChart`].destroy();
+        window[`${islandId}WindChart`] = new Chart(ctxW, {
+          type: 'line',
+          data: { 
+            labels, 
+            datasets: [{
+              label: 'Wind (kn)',
+              data: windData,
+              borderColor: islandColors[island],
+              fill: false,
+              tension: 0.5,
+              pointStyle: 'rect',
+              pointRadius: 6,
+              pointBackgroundColor: islandColors[island],
+              pointBorderColor: islandColors[island]
+            }]
+          },
+          options: {
+            ...chartOptions,
+            scales: {
+              ...chartOptions.scales,
+              y: { ...chartOptions.scales.y, min: 0, max: 35, title: { display: true, text: 'Wind (kn)', color: "#ffffff" } }
+            }
+          }
+        });
+
       });
 
     })
-    .catch(err => console.error("Fehler beim Laden der Kauai-Daten:", err));
+    .catch(err => console.error("Fehler beim Laden der Insel-Daten:", err));
 }
 
 // Direkt beim Laden ausführen
-loadKauaiCharts();
+loadIslandCharts();
 
 
 }); 
