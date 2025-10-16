@@ -326,7 +326,7 @@ footer {
   background-color: #ffffff; /* weiße Box bleibt */
   color: #0a5f5d;
   border: none;
-  padding: 0.25rem 0.5rem;
+  padding: 0.1rem 0.5rem;
   font-size: 1rem;
   font-family: "Khmer MN", sans-serif;
   cursor: pointer;
@@ -344,7 +344,7 @@ footer {
   background-color: #d47b5a;
   color: white;
   border: none;
-  padding: 0.3rem 0.5rem;
+  padding: 0.25rem 0.5rem;
   font-size: 1rem;
   font-family: "Khmer MN", sans-serif;
   cursor: pointer;
