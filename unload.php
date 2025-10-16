@@ -29,7 +29,7 @@ try {
     // → Standard = letzte 5 Tage
     // =====================================
     $today = new DateTime();
-    $default_from = (clone $today)->modify('-4 days')->format('Y-m-d 00:00:00'); 
+    $default_from = (clone $today)->modify('-6 days')->format('Y-m-d 00:00:00'); 
     $default_to   = $today->format('Y-m-d 23:59:59');
 
     // Falls kein Datum übergeben wurde → Standardzeitraum
