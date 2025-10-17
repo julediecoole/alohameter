@@ -121,7 +121,6 @@ a:hover {
 
 .boje-icon {
   position: absolute;
-
   width: 40px;
   cursor: pointer;
   transition: transform 0.2s ease, filter 0.2s ease;
@@ -141,24 +140,23 @@ a:hover {
 /* Individuelle Bojenpositionen */
 .boje-icon:nth-child(1) {
   top: 23%;
-  top: 9%;
-  left: 28%;
+  left: 29%;
 }
 
 .boje-icon:nth-child(2) {
   top: 32%;
-  top: 12%;
   left: 44%;
 }
 
 .boje-icon:nth-child(3) {
   top: 35%;
   left: 63%;
+  
 }
 
 .boje-icon:nth-child(4) {
-  top: 50%;
-  left: 66%;
+  top: 52%;
+  left: 65%;
 }
 
 /* Sicherheitsregel für Browser, die drop-shadow abschneiden */
@@ -389,9 +387,6 @@ footer {
   background-color: #b85e3e;
   transform: scale(1.05);
 }
-
-
-
 
 /* === WASSERTEMPERATUR-CHART === */
 .chart-container {
