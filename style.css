@@ -70,11 +70,15 @@ a:hover {
 
 /* Wellen-Container */
 .wellen {
-  width: 100%;
+  position: relative;
+  overflow: hidden; /* versteckt alles, was übersteht */
+  width: 100vw; /* fixiert auf Viewport-Breite */
+  max-width: 100%;
   height: 120vh;
   padding-top: 1rem;
   pointer-events: none;
 }
+
 
 /* Wellen-SVG */
 .wellen .layer {
@@ -93,6 +97,7 @@ a:hover {
   z-index: -1;
   transform: translateY(-300px); /* Wolken leicht nach unten verschoben */
   animation: moveWolken 12s linear infinite; /* Animation */
+  overflow: hidden;
 }
 
 .wellen .himmel {
@@ -151,7 +156,6 @@ a:hover {
 .boje-icon:nth-child(3) {
   top: 35%;
   left: 63%;
-  
 }
 
 .boje-icon:nth-child(4) {
