@@ -79,7 +79,6 @@ a:hover {
   pointer-events: none;
 }
 
-
 /* Wellen-SVG */
 .wellen .layer {
   width: 100%;
@@ -248,9 +247,10 @@ img.boje-icon {
 }
 
 /* Navigationspfeile */
+
 .arrow {
   position: absolute;
-  top: 400%;
+  top: 50%; /* mittig im Container */
   transform: translateY(-50%);
   background: #c96b52;
   color: white;
@@ -258,6 +258,7 @@ img.boje-icon {
   font-size: 2rem;
   padding: 12px 20px;
   cursor: pointer;
+  z-index: 10;
 }
 
 .arrow.left {
@@ -289,6 +290,22 @@ img.boje-icon {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+.chart-slide {
+  min-height: 400px; /* alle Slides gleich hoch */
+  display: none;
+  opacity: 0;
+}
+
+.chart-slide.active {
+  display: block;
+  opacity: 1;
+}
+
+.chart-slide canvas {
+  width: 100% !important;
+  height: 350px !important;
 }
 
 /* footah */

@@ -41,6 +41,37 @@ bojen.forEach(boje => {
   });
 });
 
+// === TEIL 3: KARUSSELL IN POPUPS ===
+document.querySelectorAll('.popup').forEach(popup => {
+  const slides = popup.querySelectorAll('.chart-slide');
+  let currentIndex = 0;
+
+  const updateSlides = () => {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === currentIndex);
+    });
+  };
+
+  const leftArrow = popup.querySelector('.arrow.left');
+  const rightArrow = popup.querySelector('.arrow.right');
+
+  if (leftArrow && rightArrow) {
+    leftArrow.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      updateSlides();
+    });
+
+    rightArrow.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateSlides();
+    });
+  }
+
+  updateSlides();
+});
+
 
 
   // === TEIL 3: TEMPERATUR-CHART ===
