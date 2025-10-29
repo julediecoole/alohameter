@@ -181,8 +181,7 @@ img.boje-icon {
 .popup {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
@@ -192,43 +191,40 @@ img.boje-icon {
   z-index: 1000;
 }
 
-/* Inhalt der Karte */
 .popup-content {
   background: white;
   width: 800px;
   height: 700px;
-  overflow: visible;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
   position: relative;
   animation: fadeIn 0.3s ease;
 }
 
-/* Header */
 .header {
   background-color: #c96b52;
   color: white;
-  padding: 20px 0px 10px;
+  padding: 20px 0 10px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 }
-
 .header h2 {
   margin: 0;
   font-size: 3rem;
   text-align: center;
 }
-
 .header span {
   font-size: 1.5rem;
   margin-left: 5px;
 }
 
-/* Diagrammteil */
 .body {
-  padding: 16px;
-  text-align: center;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  padding-top: 2rem;
 }
 
 .wind-section {
@@ -238,19 +234,11 @@ img.boje-icon {
   gap: 8px;
   color: #1b7a7f;
   font-size: 3rem;
-  margin-bottom: 10px;
 }
-
-.chart {
-  width: 100%;
-  height: auto;
-}
-
-/* Navigationspfeile */
 
 .arrow {
   position: absolute;
-  top: 50%; /* mittig im Container */
+  top: 55%;
   transform: translateY(-50%);
   background: #c96b52;
   color: white;
@@ -258,17 +246,10 @@ img.boje-icon {
   font-size: 2rem;
   padding: 12px 20px;
   cursor: pointer;
-  z-index: 10;
 }
+.arrow.left { left: -20px; }
+.arrow.right { right: -20px; }
 
-.arrow.left {
-  left: -20px;
-}
-.arrow.right {
-  right: -20px;
-}
-
-/* Schliessen-Button */
 .close-btn {
   position: absolute;
   top: 10px;
@@ -280,33 +261,36 @@ img.boje-icon {
   cursor: pointer;
 }
 
-/* Animation */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .chart-slide {
-  min-height: 400px; /* alle Slides gleich hoch */
   display: none;
   opacity: 0;
 }
-
 .chart-slide.active {
-  display: block;
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   opacity: 1;
 }
-
 .chart-slide canvas {
   width: 100% !important;
   height: 350px !important;
 }
+
+
+.chart-slide h3 {
+  margin: 2rem;
+  font-size: 2rem;
+  color: #1b7a7f;
+  text-align: center;
+}
+
 
 /* footah */
 footer {
@@ -342,7 +326,7 @@ footer {
 .chart-container canvas {
   width: 100% !important;
   height: auto !important; /* Höhe passt sich proportional an */
-  max-height: 500px;
+  max-height: 300px;
   display: block;
   padding: 10px;
 }

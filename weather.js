@@ -214,26 +214,42 @@ document.querySelectorAll('.popup').forEach(popup => {
     }
     loadChart(selectedDate);
   });
-
-  // === TEIL 4: DIAGRAMME FÜR ALLE INSELN (48h, 6-Stunden-Intervalle) ===
-  function loadIslandCharts() {
+// === TEIL 4: DIAGRAMME FÜR ALLE INSELN (48h, 6-Stunden-Intervalle) ===
+function loadIslandCharts() {
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";
-  
-  const now = new Date();
-  const fromDateObj = new Date(now.getTime() - 48*60*60*1000); // 48h zurück
 
-  const fromDate = `${fromDateObj.toISOString().split("T")[0]} ${String(fromDateObj.getHours()).padStart(2,'0')}:00:00`;
-  const toDate = `${now.toISOString().split("T")[0]} ${String(now.getHours()).padStart(2,'0')}:59:59`;
+  const now = new Date();
+  const fromDateObj = new Date(now.getTime() - 48 * 60 * 60 * 1000); // 48h zurück
+
+  const fromDate = `${fromDateObj.toISOString().split("T")[0]} ${String(fromDateObj.getHours()).padStart(2, '0')}:00:00`;
+  const toDate = `${now.toISOString().split("T")[0]} ${String(now.getHours()).padStart(2, '0')}:59:59`;
 
   fetch(`${apiUrl}?from=${encodeURIComponent(fromDate)}&to=${encodeURIComponent(toDate)}`)
     .then(res => res.json())
     .then(data => {
       const islands = ["Kauai", "Oahu", "Maui", "Big Island"];
-      const islandColors = {
-        Kauai: "#F9B9AA",
-        Oahu: "#E17F69",
-        Maui: "#138987",
-        "Big Island": "#BCEEFF"
+
+      // === Farbdefinitionen ===
+      const chartFrameColor = "#138987"; // Türkisgrün – Rahmen, Achsen, Gridlines
+      const chartLineColor = "#E17F69";  // Rotrosa – Datenkurven
+
+      const chartOptions = {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            ticks: { color: chartFrameColor },
+            grid: { color: chartFrameColor },
+            border: { color: chartFrameColor }
+          },
+          x: {
+            ticks: { color: chartFrameColor },
+            grid: { color: chartFrameColor },
+            border: { color: chartFrameColor }
+          }
+        }
       };
 
       islands.forEach(island => {
@@ -244,7 +260,7 @@ document.querySelectorAll('.popup').forEach(popup => {
           const dateObj = new Date(d.created_at);
           const hour = dateObj.getHours();
           const roundedHour = Math.floor(hour / 6) * 6;
-          const key = `${dateObj.toISOString().split("T")[0]} ${String(roundedHour).padStart(2,'0')}:00`;
+          const key = `${dateObj.toISOString().split("T")[0]} ${String(roundedHour).padStart(2, '0')}:00`;
 
           if (!intervals[key]) intervals[key] = { wellenhoehe: [], wellenabstand: [], wind: [] };
           intervals[key].wellenhoehe.push(parseFloat(d.wellenhoehe));
@@ -253,124 +269,170 @@ document.querySelectorAll('.popup').forEach(popup => {
         });
 
         const sortedKeys = Object.keys(intervals).sort();
-        const avg = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
+        const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+
         const labels = sortedKeys.map(k => {
           const dateObj = new Date(k);
-          return `${String(dateObj.getHours()).padStart(2,'0')}:00`;
+          return `${String(dateObj.getHours()).padStart(2, '0')}:00`;
         });
 
         const wellenhoeheData = sortedKeys.map(k => parseFloat(avg(intervals[k].wellenhoehe).toFixed(2)));
         const wellenabstandData = sortedKeys.map(k => parseFloat(avg(intervals[k].wellenabstand).toFixed(2)));
         const windData = sortedKeys.map(k => parseFloat(avg(intervals[k].wind).toFixed(2)));
 
-        const chartOptions = {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { ticks: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.26)" }, border: { color: "#ffffff" } },
-            x: { ticks: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.26)" }, border: { color: "#ffffff" } }
-          }
-        };
-
         // ID sauber machen (Leerzeichen entfernen)
         const islandId = island.toLowerCase().replace(/\s/g, '');
 
-        // --- Wellenhöhe ---
+        // === Wellenhöhe ===
         const ctxH = document.getElementById(`${islandId}-wellen`).getContext("2d");
         ctxH.canvas.style.backgroundColor = "transparent";
-        if(window[`${islandId}WellenhoeheChart`]) window[`${islandId}WellenhoeheChart`].destroy();
+        if (window[`${islandId}WellenhoeheChart`]) window[`${islandId}WellenhoeheChart`].destroy();
         window[`${islandId}WellenhoeheChart`] = new Chart(ctxH, {
           type: 'line',
-          data: { 
-            labels, 
+          data: {
+            labels,
             datasets: [{
               label: 'Wellenhöhe (m)',
               data: wellenhoeheData,
-              borderColor: islandColors[island],
+              borderColor: chartLineColor,
               fill: false,
               tension: 0.5,
               pointStyle: 'rect',
               pointRadius: 6,
-              pointBackgroundColor: islandColors[island],
-              pointBorderColor: islandColors[island]
+              pointBackgroundColor: chartLineColor,
+              pointBorderColor: chartLineColor
             }]
           },
           options: {
             ...chartOptions,
             scales: {
               ...chartOptions.scales,
-              y: { ...chartOptions.scales.y, min: 0, max: 10, title: { display: true, text: 'Wellenhöhe (m)', color: "#ffffff" } }
+              y: {
+                ...chartOptions.scales.y,
+                min: 0,
+                max: 10,
+                title: { display: true, text: 'Wellenhöhe (m)', color: chartFrameColor }
+              }
             }
           }
         });
 
-        // --- Wellenabstand ---
+        // === Wellenabstand ===
         const ctxA = document.getElementById(`${islandId}-wellenabstand`).getContext("2d");
         ctxA.canvas.style.backgroundColor = "transparent";
-        if(window[`${islandId}WellenabstandChart`]) window[`${islandId}WellenabstandChart`].destroy();
+        if (window[`${islandId}WellenabstandChart`]) window[`${islandId}WellenabstandChart`].destroy();
         window[`${islandId}WellenabstandChart`] = new Chart(ctxA, {
           type: 'line',
-          data: { 
-            labels, 
+          data: {
+            labels,
             datasets: [{
               label: 'Wellenabstand (m)',
               data: wellenabstandData,
-              borderColor: islandColors[island],
+              borderColor: chartLineColor,
               fill: false,
               tension: 0.5,
               pointStyle: 'rect',
               pointRadius: 6,
-              pointBackgroundColor: islandColors[island],
-              pointBorderColor: islandColors[island]
+              pointBackgroundColor: chartLineColor,
+              pointBorderColor: chartLineColor
             }]
           },
           options: {
             ...chartOptions,
             scales: {
               ...chartOptions.scales,
-              y: { ...chartOptions.scales.y, min: 0, max: 20, title: { display: true, text: 'Wellenabstand (m)', color: "#ffffff" } }
+              y: {
+                ...chartOptions.scales.y,
+                min: 0,
+                max: 20,
+                title: { display: true, text: 'Wellenabstand (m)', color: chartFrameColor }
+              }
             }
           }
         });
 
-        // --- Wind ---
+        // === Wind ===
         const ctxW = document.getElementById(`${islandId}-wind`).getContext("2d");
         ctxW.canvas.style.backgroundColor = "transparent";
-        if(window[`${islandId}WindChart`]) window[`${islandId}WindChart`].destroy();
+        if (window[`${islandId}WindChart`]) window[`${islandId}WindChart`].destroy();
         window[`${islandId}WindChart`] = new Chart(ctxW, {
           type: 'line',
-          data: { 
-            labels, 
+          data: {
+            labels,
             datasets: [{
               label: 'Wind (kn)',
               data: windData,
-              borderColor: islandColors[island],
+              borderColor: chartLineColor,
               fill: false,
               tension: 0.5,
               pointStyle: 'rect',
               pointRadius: 6,
-              pointBackgroundColor: islandColors[island],
-              pointBorderColor: islandColors[island]
+              pointBackgroundColor: chartLineColor,
+              pointBorderColor: chartLineColor
             }]
           },
           options: {
             ...chartOptions,
             scales: {
               ...chartOptions.scales,
-              y: { ...chartOptions.scales.y, min: 0, max: 35, title: { display: true, text: 'Wind (kn)', color: "#ffffff" } }
+              y: {
+                ...chartOptions.scales.y,
+                min: 0,
+                max: 35,
+                title: { display: true, text: 'Wind (kn)', color: chartFrameColor }
+              }
             }
           }
         });
-
       });
-
     })
     .catch(err => console.error("Fehler beim Laden der Insel-Daten:", err));
 }
 
 // Direkt beim Laden ausführen
-loadIslandCharts();
+loadIslandCharts(); 
+document.querySelectorAll('.popup').forEach(popup => {
+  const slides = popup.querySelectorAll('.chart-slide');
+  let currentIndex = 0;
+
+  // === Titel-Element finden ===
+  const titleElement = popup.querySelector('.chart-title');
+
+  // === Titel für jede Slide (Reihenfolge muss zu deinen .chart-slide-Elementen passen) ===
+  const titles = ["Wellenhöhe (m)", "Wellenabstand (m)", "Wind (kn)"];
+
+  // Erste Slide & Titel initial anzeigen
+  slides.forEach((slide, i) => {
+    slide.style.display = i === 0 ? 'block' : 'none';
+  });
+  if (titleElement) titleElement.textContent = titles[0];
+
+  const showSlide = (index) => {
+    slides.forEach((slide, i) => {
+      slide.style.display = i === index ? 'block' : 'none';
+    });
+    if (titleElement) titleElement.textContent = titles[index];
+    currentIndex = index;
+  };
+
+  const rightArrow = popup.querySelector('.arrow.right');
+  const leftArrow = popup.querySelector('.arrow.left');
+
+  if (rightArrow) {
+    rightArrow.addEventListener('click', () => {
+      const nextIndex = (currentIndex + 1) % slides.length;
+      showSlide(nextIndex);
+    });
+  }
+
+  if (leftArrow) {
+    leftArrow.addEventListener('click', () => {
+      const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+      showSlide(prevIndex);
+    });
+  }
+});
 
 
-}); 
 
+});
