@@ -434,5 +434,4 @@ document.querySelectorAll('.popup').forEach(popup => {
 });
 
 
-
 });
