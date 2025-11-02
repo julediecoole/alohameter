@@ -73,7 +73,6 @@ document.querySelectorAll('.popup').forEach(popup => {
 });
 
 
-
   // === TEIL 3: TEMPERATUR-CHART ===
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";
 

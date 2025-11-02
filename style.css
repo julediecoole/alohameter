@@ -70,9 +70,9 @@ a:hover {
   padding-top: 1rem;
   pointer-events: none;
 
-  background:  url("./wellen/wolken.svg"), url("./wellen/wellen_alle.svg"), #BCEEFF;
-  background-size: 70%, 100%, auto;
-  background-position: -240% 10%, center calc(100% + 1px), center;
+  background: url("./wellen/wellen_alle.svg"), url("./wellen/wolken.svg"), #BCEEFF;
+  background-size: 100%, 70%, auto;
+  background-position: center calc(100% + 1px), -240% 10%, center;
   background-repeat: no-repeat, no-repeat, repeat;
 
   animation: moveWolken 12s linear infinite; 
@@ -82,11 +82,11 @@ a:hover {
 @keyframes moveWolken {
   0% {
     /* transform: translateX(-120%) translateY(-450px);  */
-    background-position: -240% 10%, center calc(100% + 1px), center;
+    background-position: center calc(100% + 1px), -240% 10%, center;
   }
   100% {
     /* transform: translateX(150%) translateY(-450px);  */
-    background-position: 340% 10%, center calc(100% + 1px), center;
+    background-position: center calc(100% + 1px), 340% 10%, center;
   }
 }
 
@@ -181,8 +181,10 @@ img.boje-icon {
 
 .popup-content {
   background: white;
-  width: 800px;
-  height: 700px;
+  width: 90vw;
+  max-width: 800px;
+  height: 80vh;
+  max-height: 700px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
   position: relative;
   animation: fadeIn 0.3s ease;
@@ -214,7 +216,7 @@ img.boje-icon {
   align-items: center;
   gap: 10px;
   height: 100%;
-  padding-top: 2rem;
+  padding: 2rem;
 }
 
 .wind-section {
