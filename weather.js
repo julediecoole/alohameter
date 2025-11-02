@@ -177,6 +177,7 @@ document.querySelectorAll('.popup').forEach(popup => {
           },
           options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
               legend: { position: "top" }
             },
@@ -235,6 +236,7 @@ function loadIslandCharts() {
 
       const chartOptions = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: { display: false }
         },
@@ -403,13 +405,13 @@ document.querySelectorAll('.popup').forEach(popup => {
 
   // Erste Slide & Titel initial anzeigen
   slides.forEach((slide, i) => {
-    slide.style.display = i === 0 ? 'block' : 'none';
+    slide.style.display = i === 0 ? 'flex' : 'none';
   });
   if (titleElement) titleElement.textContent = titles[0];
 
   const showSlide = (index) => {
     slides.forEach((slide, i) => {
-      slide.style.display = i === index ? 'block' : 'none';
+      slide.style.display = i === index ? 'flex' : 'none';
     });
     if (titleElement) titleElement.textContent = titles[index];
     currentIndex = index;
