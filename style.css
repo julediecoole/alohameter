@@ -7,29 +7,28 @@
 body {
   background-color: #74bfba;
   font-family: "Khmer MN";
-  margin: 0;
-  padding: 0;
   color: #138987;
 }
 
-/* titel */
+/* ===== RESPONSIVE TEXT ===== */
 h1 {
   text-align: left;
   margin-top: 1.5rem;
-  font-size: 8rem;
   padding-left: 3rem;
+  font-size: clamp(3rem, 10vw, 8rem);
 }
-/* titel2 */
+
 h2 {
   text-align: left;
-  font-size: 6rem;
   font-weight: bold;
   padding-left: 3rem;
   color: #ffffff;
   margin-bottom: -2rem;
+  font-size: clamp(2rem, 8vw, 6rem);
 }
+
 h3 {
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 2.5vw, 1.5rem);
   text-align: center;
   line-height: 1.5;
   color: #ffffff;
@@ -38,7 +37,7 @@ h3 {
 
 p {
   position: relative;
-  font-size: 2rem;
+  font-size: clamp(1rem, 2.5vw, 2rem);
   text-align: left;
   line-height: 1.5;
   color: #ffffff;
@@ -46,17 +45,21 @@ p {
   z-index: 5;
 }
 
-/* links */
 a {
   color: white;
-  text-decoration: none; /* Unterstrich entfernen */
+  text-decoration: none;
   font-family: "Khmer MN", sans-serif;
-  transition: color 0.3s; /* sanfter Übergang bei Hover */
+  transition: color 0.3s;
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
 }
 
-/* Hover-Effekt */
 a:hover {
   color: #bceeff;
+}
+
+button, #loadChartBtn {
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  cursor: pointer;
 }
 
 /* Wellen-Container */
@@ -78,20 +81,17 @@ a:hover {
   animation: moveWolken 12s linear infinite; 
 }
 
-/* Keyframes für Bewegung von links nach rechts */
 @keyframes moveWolken {
   0% {
-    /* transform: translateX(-120%) translateY(-450px);  */
     background-position: center calc(100% + 1px), -240% 10%, center;
   }
   100% {
-    /* transform: translateX(150%) translateY(-450px);  */
     background-position: center calc(100% + 1px), 340% 10%, center;
   }
 }
 
 .wellen #weather p {
-  font-size: 2rem;
+  font-size: clamp(1rem, 2.5vw, 2rem);
   line-height: 1.5;
   color: #138987;
   padding-left: 3rem;
@@ -108,9 +108,7 @@ a:hover {
 .inseln-container {
   position: relative;
   width: 100vw; 
-  margin-left: calc(
-    -50vw + 50%
-  ); 
+  margin-left: calc(-50vw + 50%);
   overflow: hidden; 
 }
 
@@ -131,37 +129,17 @@ a:hover {
   border-radius: 100px;
 }
 
-/* Hover-Effekt */
 .boje-icon:hover {
   transform: scale(1.1);
   filter: drop-shadow(6px 9px 10px rgba(0, 0, 0, 0.5));
-  border-radius: 100px;
 }
 
-/* Individuelle Bojenpositionen */
-.boje-icon:nth-child(1) {
-  top: 23%;
-  left: 29%;
-}
+.boje-icon:nth-child(1) { top: 23%; left: 29%; }
+.boje-icon:nth-child(2) { top: 32%; left: 44%; }
+.boje-icon:nth-child(3) { top: 35%; left: 63%; }
+.boje-icon:nth-child(4) { top: 52%; left: 65%; }
 
-.boje-icon:nth-child(2) {
-  top: 32%;
-  left: 44%;
-}
-
-.boje-icon:nth-child(3) {
-  top: 35%;
-  left: 63%;
-}
-
-.boje-icon:nth-child(4) {
-  top: 52%;
-  left: 65%;
-}
-
-/* Sicherheitsregel für Browser, die drop-shadow abschneiden */
-svg,
-img.boje-icon {
+svg, img.boje-icon {
   overflow: visible !important;
 }
 
@@ -192,7 +170,7 @@ img.boje-icon {
   flex-direction: column;
 }
 
-.header {
+.popup-content .header {
   background-color: #c96b52;
   color: white;
   padding: 20px 0 10px;
@@ -200,17 +178,18 @@ img.boje-icon {
   justify-content: space-between;
   align-items: flex-end;
 }
-.header h2 {
+
+.popup-content .header h2 {
   margin: 0;
-  font-size: 3rem;
+  font-size: clamp(1.5rem, 5vw, 3rem);
   text-align: center;
 }
-.header span {
-  font-size: 1.5rem;
-  margin-left: 5px;
+
+.popup-content .header span {
+  font-size: clamp(1rem, 3vw, 1.5rem);
 }
 
-.body {
+.popup-content .body {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -225,7 +204,7 @@ img.boje-icon {
   justify-content: center;
   gap: 8px;
   color: #1b7a7f;
-  font-size: 3rem;
+  font-size: clamp(1.5rem, 4vw, 3rem);
 }
 
 .arrow {
@@ -258,6 +237,7 @@ img.boje-icon {
   to { opacity: 1; transform: scale(1); }
 }
 
+/* Chart-Slides */
 .chart-slide {
   display: none;
   opacity: 0;
@@ -273,73 +253,35 @@ img.boje-icon {
   opacity: 1;
 }
 .chart-slide .chart-canvas {
-  /* width: 100% !important;
-  height: 350px !important; */
   width: 100%;
   height: 100%;
 }
-
-
 .chart-slide h3 {
-  margin: 2rem;
-  font-size: 2rem;
-  color: #1b7a7f;
-  text-align: center;
+  font-size: clamp(1rem, 3vw, 2rem);
 }
 
-
-/* footah */
-footer {
-  text-align: center;
-  padding: 1rem;
-  margin-top: 3rem;
-  font-size: 0.9rem;
-  color: white;
-}
-
-/* === WASSERTEMPERATUR-CHART === */
+/* Charts in Container */
 .chart-container {
   width: 95%;
   max-width: 1000px;
   margin: 3rem auto;
 }
-
 .chart-container h2 {
+  font-size: clamp(2rem, 6vw, 6rem);
   color: #ffffff;
-  font-family: "Khmer MN", sans-serif;
-  padding: 0;
-  font-size: 6rem; /* Originalgröße */
 }
-
 .chart-container p {
-  font-size: 1.5rem;
-  font-family: "Khmer MN", sans-serif;
-  color: #ffffff;
-  padding: 0;
-  margin-bottom: 1rem;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
 }
-
-.chart-container .wassertemperatur-canvas {
+.chart-container canvas {
   width: 100% !important;
-  height: auto !important; 
+  height: auto !important;
   max-height: 600px;
   display: block;
   padding: 10px;
 }
 
-/* === KAUAI-CHARTS === */
-#kauai-charts {
-  margin-top: 3rem;
-}
-
-#kauai-charts canvas {
-  width: 100% !important;
-  height: auto !important;
-  max-height: 500px;
-  margin-bottom: 2rem;
-}
-
-/* === DATEPICKER === */
+/* Datepicker */
 .chart-datepicker {
   display: flex;
   justify-content: flex-start;
@@ -347,231 +289,28 @@ footer {
   gap: 0.5rem;
   margin-top: 0.3rem;
   margin-bottom: 2rem;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
-
 .chart-datepicker label {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
   color: #ffffff;
-  font-family: "Khmer MN", sans-serif;
-  font-size: 1.5rem;
 }
-
 .chart-datepicker input[type="date"] {
-  background-color: #ffffff; 
-  color: #0a5f5d;
-  border: none;
-  padding: 0.1rem 0.5rem;
-  font-size: 1rem;
-  font-family: "Khmer MN", sans-serif;
-  cursor: pointer;
-  width: auto; 
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
-/* Hover- & Fokus-Effekt */
-.chart-datepicker input[type="date"]:hover,
-.chart-datepicker input[type="date"]:focus {
-  outline: none;
-  color: #0a5f5d;
-}
-
-#loadChartBtn {
-  background-color: #d47b5a;
-  color: white;
-  border: none;
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
-  font-family: "Khmer MN", sans-serif;
-  cursor: pointer;
-}
-
-#loadChartBtn:hover {
-  background-color: #b85e3e;
-  transform: scale(1.05);
-}
-
-/* === WASSERTEMPERATUR-CHART === */
-.chart-container {
-  width: 95%;
-  max-width: 1000px;
-  margin: 3rem auto;
-}
-
-.chart-container h2 {
-  color: #ffffff;
-  font-family: "Khmer MN", sans-serif;
-  padding: 0;
-  font-size: 6rem; /* Originalgröße */
-}
-
-.chart-container p {
-  font-size: 1.5rem;
-  font-family: "Khmer MN", sans-serif;
-  color: #ffffff;
-  padding: 0;
-  margin-bottom: 1rem;
-}
-
-.chart-container canvas {
-  width: 100% !important;
-  height: auto !important; 
-  max-height: 500px;
-  display: block;
-  padding: 10px;
-}
-
-/* === DATEPICKER === */
-.chart-datepicker {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.3rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap; 
-}
-
-.chart-datepicker label {
-  color: #ffffff;
-  font-family: "Khmer MN", sans-serif;
-  font-size: 1.5rem;
-}
-
-.chart-datepicker input[type="date"] {
-  background-color: #ffffff; 
-  color: #0a5f5d;
-  border: none;
-  padding: 0.1rem 0.5rem;
-  font-size: 1rem;
-  font-family: "Khmer MN", sans-serif;
-  cursor: pointer;
-  width: auto; 
-}
-
-/* Hover- & Fokus-Effekt */
-.chart-datepicker input[type="date"]:hover,
-.chart-datepicker input[type="date"]:focus {
-  outline: none;
-  color: #0a5f5d;
-}
-
-#loadChartBtn {
-  background-color: #d47b5a;
-  color: white;
-  border: none;
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
-  font-family: "Khmer MN", sans-serif;
-  cursor: pointer;
-}
-
-#loadChartBtn:hover {
-  background-color: #b85e3e;
-  transform: scale(1.05);
-}
-
-/* === TEMPERATUR-CHART === */
-.chart-container {
-  width: 95%;
-  max-width: 1000px;
-  margin: 3rem auto;
-}
-
-.chart-container h2 {
-  color: #ffffff;
-  font-family: "Khmer MN", sans-serif;
-  padding: 0;
-  font-size: 6rem; /* Originalgröße */
-}
-
-.chart-container p {
-  font-size: 1.5rem;
-  font-family: "Khmer MN", sans-serif;
-  color: #ffffff;
-  padding: 0;
-  margin-bottom: 1rem;
-}
-
-.chart-container canvas {
-  width: 100% !important;
-  height: auto !important; 
-  max-height: 500px;
-  display: block;
-  padding: 10px;
-}
-
-/* === DATEPICKER === */
-.chart-datepicker {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.3rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap; 
-}
-
-.chart-datepicker label {
-  color: #ffffff;
-  font-family: "Khmer MN", sans-serif;
-  font-size: 1.5rem;
-}
-
-.chart-datepicker input[type="date"] {
-  background-color: #ffffff; 
-  color: #0a5f5d;
-  border: none;
-  padding: 0.1rem 0.5rem;
-  font-size: 1rem;
-  font-family: "Khmer MN", sans-serif;
-  cursor: pointer;
-  width: auto; 
-}
-
-/* Hover- & Fokus-Effekt */
-.chart-datepicker input[type="date"]:hover,
-.chart-datepicker input[type="date"]:focus {
-  outline: none;
-  color: #0a5f5d;
-}
-
-#loadChartBtn {
-  background-color: #d47b5a;
-  color: white;
-  border: none;
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
-  font-family: "Khmer MN", sans-serif;
-  cursor: pointer;
-}
-
-#loadChartBtn:hover {
-  background-color: #b85e3e;
-  transform: scale(1.05);
-}
-
-/* footah */
+/* Footer */
 footer {
   text-align: center;
   padding: 1rem;
   margin-top: 3rem;
-  font-size: 0.9rem;
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
   color: white;
 }
 
-/* === MOBILE === */
-@media (max-width: 600px) {
-  .chart-container h2 {
-    font-size: 4rem;
-  }
-  /* .chart-container canvas {
-    max-height: 300px;
-  } */
-  .chart-datepicker label {
-    font-size: 1.2rem;
-  }
-  .chart-datepicker input[type="date"],
-  #loadChartBtn {
-    font-size: 0.9rem;
-    padding: 0.25rem 0.4rem;
-  }
+/* === MOBILE MEDIA QUERY (optional für extra kleine Screens) === */
+@media (max-width: 400px) {
+  h1 { font-size: clamp(2rem, 8vw, 6rem); }
+  h2 { font-size: clamp(1.5rem, 6vw, 5rem); }
+  p, a, button, .chart-datepicker label { font-size: clamp(0.9rem, 2vw, 1rem); }
 }
