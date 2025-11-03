@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // === TEIL 2: POPUP ===// === Popup-Logik für alle Bojen ===
 const bojen = document.querySelectorAll('.boje-icon');
 
-bojen.forEach(boje => {
+bojen.forEach(boje => {  
   const popupId = boje.dataset.popup; // data-popup auslesen
   const popup = document.getElementById(popupId);
 
@@ -206,14 +206,14 @@ document.querySelectorAll('.popup').forEach(popup => {
   loadChart();
 
   // === Eventlistener für den Datepicker-Button
-  document.getElementById("loadChartBtn").addEventListener("click", () => {
-    const selectedDate = document.getElementById("startDate").value;
+  document.getElementById('startDate').addEventListener('change', () => {
+    const selectedDate = document.getElementById('startDate').value
     if (!selectedDate) {
-      alert("Bitte wähle ein Datum aus!");
-      return;
+      alert('Bitte wähle ein Datum aus!')
+      return
     }
-    loadChart(selectedDate);
-  });
+    loadChart(selectedDate)
+  })
 // === TEIL 4: DIAGRAMME FÜR ALLE INSELN (48h, 6-Stunden-Intervalle) ===
 function loadIslandCharts() {
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";

@@ -6,7 +6,8 @@
 
 body {
   background-color: #74bfba;
-  font-family: "Khmer MN";
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
   color: #138987;
 }
 
@@ -21,9 +22,7 @@ h1 {
 h2 {
   text-align: left;
   font-weight: bold;
-  padding-left: 3rem;
   color: #ffffff;
-  margin-bottom: -2rem;
   font-size: clamp(2rem, 8vw, 6rem);
 }
 
@@ -48,7 +47,6 @@ p {
 a {
   color: white;
   text-decoration: none;
-  font-family: "Khmer MN", sans-serif;
   transition: color 0.3s;
   font-size: clamp(0.9rem, 2vw, 1.2rem);
 }
@@ -57,7 +55,8 @@ a:hover {
   color: #bceeff;
 }
 
-button, #loadChartBtn {
+button,
+#loadChartBtn {
   font-size: clamp(0.9rem, 2vw, 1.2rem);
   cursor: pointer;
 }
@@ -65,20 +64,20 @@ button, #loadChartBtn {
 /* Wellen-Container */
 .wellen {
   position: relative;
-  overflow: hidden; 
-  width: 100vw; 
+  overflow: hidden;
+  width: 100vw;
   max-width: 100%;
   height: 120vh;
-  max-height: 150vw;
+  max-height: 90vw;
   padding-top: 1rem;
   pointer-events: none;
 
-  background: url("./wellen/wellen_alle.svg"), url("./wellen/wolken.svg"), #BCEEFF;
+  background: url('./wellen/wellen_alle.svg'), url('./wellen/wolken.svg'), #bceeff;
   background-size: 100%, 70%, auto;
   background-position: center calc(100% + 1px), -240% 10%, center;
   background-repeat: no-repeat, no-repeat, repeat;
 
-  animation: moveWolken 12s linear infinite; 
+  animation: moveWolken 12s linear infinite;
 }
 
 @keyframes moveWolken {
@@ -107,41 +106,64 @@ button, #loadChartBtn {
 
 .inseln-container {
   position: relative;
-  width: 100vw; 
+  width: 100vw;
   margin-left: calc(-50vw + 50%);
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .inseln-container .maps {
-  width: 100vw; 
+  width: 100vw;
   height: auto;
   display: block;
-  padding: 5rem 0; 
+  padding: 5rem 0;
+}
+
+.inseln-container .bojen {
+  width: 100vw;
+  height: auto;
+  display: block;
+  padding: 5rem 0;
+  position: absolute;
+  top: 0;
 }
 
 .boje-icon {
-  position: absolute;
-  width: 40px;
   cursor: pointer;
   transition: transform 0.2s ease, filter 0.2s ease;
   overflow: visible;
-  filter: drop-shadow(4px 6px 6px rgba(0, 0, 0, 0.4));
   border-radius: 100px;
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: url('#dropshadow');
 }
 
 .boje-icon:hover {
   transform: scale(1.1);
-  filter: drop-shadow(6px 9px 10px rgba(0, 0, 0, 0.5));
+  filter: url('#dropshadow-hover')
+}
+  
+  /*
+.boje-icon:nth-child(1) {
+  top: 23%;
+  left: 29%;
+}
+.boje-icon:nth-child(2) {
+  top: 32%;
+  left: 44%;
+}
+.boje-icon:nth-child(3) {
+  top: 35%;
+  left: 63%;
+}
+.boje-icon:nth-child(4) {
+  top: 52%;
+  left: 65%;
 }
 
-.boje-icon:nth-child(1) { top: 23%; left: 29%; }
-.boje-icon:nth-child(2) { top: 32%; left: 44%; }
-.boje-icon:nth-child(3) { top: 35%; left: 63%; }
-.boje-icon:nth-child(4) { top: 52%; left: 65%; }
-
-svg, img.boje-icon {
+svg,
+img.boje-icon {
   overflow: visible !important;
-}
+} */
 
 /* === POPUP === */
 .popup {
@@ -159,9 +181,9 @@ svg, img.boje-icon {
 
 .popup-content {
   background: white;
-  width: 90vw;
+  width: 80vw;
   max-width: 800px;
-  height: 80vh;
+  height: 60vh;
   max-height: 700px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -173,10 +195,10 @@ svg, img.boje-icon {
 .popup-content .header {
   background-color: #c96b52;
   color: white;
-  padding: 20px 0 10px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
+  padding: 1rem 2rem;
 }
 
 .popup-content .header h2 {
@@ -187,6 +209,31 @@ svg, img.boje-icon {
 
 .popup-content .header span {
   font-size: clamp(1rem, 3vw, 1.5rem);
+}
+
+.popup-content .header .close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  position: relative;
+}
+
+.popup-content .header .close-btn:before, .popup-content .header .close-btn:after {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  content: ' ';
+  height: 33px;
+  width: 2px;
+  background-color: white;
+}
+.popup-content .header .close-btn:before {
+  transform: rotate(45deg);
+}
+.popup-content .header .close-btn:after {
+  transform: rotate(-45deg);
 }
 
 .popup-content .body {
@@ -218,23 +265,22 @@ svg, img.boje-icon {
   padding: 12px 20px;
   cursor: pointer;
 }
-.arrow.left { left: -20px; }
-.arrow.right { right: -20px; }
-
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 4rem;
-  cursor: pointer;
+.arrow.left {
+  left: -2rem;
+}
+.arrow.right {
+  right: -2rem;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Chart-Slides */
@@ -258,6 +304,7 @@ svg, img.boje-icon {
 }
 .chart-slide h3 {
   font-size: clamp(1rem, 3vw, 2rem);
+  color: #138987;
 }
 
 /* Charts in Container */
@@ -294,9 +341,14 @@ svg, img.boje-icon {
 .chart-datepicker label {
   font-size: clamp(1rem, 2.5vw, 1.5rem);
   color: #ffffff;
+  margin: 0 0 2px 0.5rem;
 }
-.chart-datepicker input[type="date"] {
+.chart-datepicker input[type='date'] {
+  all: unset;
   font-size: clamp(0.9rem, 2vw, 1rem);
+  border: solid 1px white;
+  padding: 0 1rem;
+  border-radius: 5px;
 }
 
 /* Footer */
@@ -310,7 +362,28 @@ footer {
 
 /* === MOBILE MEDIA QUERY (optional für extra kleine Screens) === */
 @media (max-width: 400px) {
-  h1 { font-size: clamp(2rem, 8vw, 6rem); }
-  h2 { font-size: clamp(1.5rem, 6vw, 5rem); }
-  p, a, button, .chart-datepicker label { font-size: clamp(0.9rem, 2vw, 1rem); }
+  h1 {
+    font-size: clamp(2rem, 8vw, 6rem);
+  }
+  h2 {
+    font-size: clamp(1.5rem, 6vw, 5rem);
+  }
+  p,
+  a,
+  button,
+  .chart-datepicker label {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+  }
+
+  .chart-datepicker input[type='date'] {
+    font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+  }
+
+  .boje-icon {
+    transform: scale(2);
+  }
+
+  .boje-icon:hover {
+    transform: scale(2.2);
+  }
 }

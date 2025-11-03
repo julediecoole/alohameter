@@ -6,6 +6,13 @@
     <title>AlohaMeter</title>
 
     <!-- CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" href="style.css" />
 
     <!-- JavaScript -->
@@ -392,7 +399,7 @@
             <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2397_484" />
             <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2397_484" result="shape" />
           </filter>
-          
+
           <!-- kauai -->
           <filter
             id="filter3_d_2397_484"
@@ -488,12 +495,66 @@
         </defs>
       </svg>
 
-      <div class="bojen-container">
-        <img src="wellen/boje-ohneschatten.svg" class="boje-icon" data-popup="popup-kauai" />
-        <img src="wellen/boje-ohneschatten.svg" class="boje-icon" data-popup="popup-oahu" />
-        <img src="wellen/boje-ohneschatten.svg" class="boje-icon" data-popup="popup-maui" />
-        <img src="wellen/boje-ohneschatten.svg" class="boje-icon" data-popup="popup-bigisland" />
-      </div>
+      <svg class="bojen" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1392 1227">
+        <defs>
+          <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
+            <!-- FeDropShadow draws the shadow  -->
+            <feDropShadow dx="4" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.4" />
+          </filter>
+          <filter id="dropshadow-hover" x="-50%" y="-50%" width="200%" height="200%">
+            <!-- FeDropShadow draws the shadow  -->
+            <feDropShadow dx="4" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.6" />
+          </filter>
+        </defs>
+        <g id="boje-kauai" class="boje-icon" data-popup="popup-kauai">
+          <rect opacity="0" x="394.9" y="244.8" width="38.4" height="53.3" rx="18.5" ry="18.5" />
+          <path
+            fill="#fff"
+            d="M399.5,275.6c2.1-5.1,7.1-8.6,12.7-9.4l.5-21.6.9-.4,21.2,7c.2.6.2,1.3-.2,1.9-1.1,1.8-16.7,4.5-19,6.9v6.2c5.8.3,10.8,4.2,13.2,9.3h-29.3Z"
+          />
+          <path
+            fill="#fff"
+            d="M432,280.2c2.2,2.2,1.5,7.2-1.8,8.1h-32c-4.8-.8-4.1-8.6.6-9.3,9.5.7,20.6-1.1,29.8,0,.9,0,2.8.7,3.4,1.3Z"
+          />
+          <path fill="#fff" d="M428.8,292.1c-.9.9-6.2,6.1-14.6,6.1s-13.7-5.1-14.6-6.1h29.3Z" />
+        </g>
+        <g id="boje-oahu" class="boje-icon" data-popup="popup-oahu">
+          <rect opacity="0" x="601.3" y="358.3" width="38.4" height="53.3" rx="18.5" ry="18.5" />
+          <path
+            fill="#fff"
+            d="M606,389.2c2.1-5.1,7.1-8.6,12.7-9.4l.5-21.6.9-.4,21.2,7c.2.6.2,1.3-.2,1.9-1.1,1.8-16.7,4.5-19,6.9v6.2c5.8.3,10.8,4.2,13.2,9.3h-29.3Z"
+          />
+          <path
+            fill="#fff"
+            d="M638.4,393.7c2.2,2.2,1.5,7.2-1.8,8.1h-32c-4.8-.8-4.1-8.6.6-9.3,9.5.7,20.6-1.1,29.8,0,.9,0,2.8.7,3.4,1.3Z"
+          />
+          <path fill="#fff" d="M635.3,405.6c-.9.9-6.2,6.1-14.6,6.1s-13.7-5.1-14.6-6.1h29.3Z" />
+        </g>
+        <g id="boje-maui" class="boje-icon" data-popup="popup-maui">
+          <rect opacity="0" x="866" y="402.2" width="38.4" height="53.3" rx="18.5" ry="18.5" />
+          <path
+            fill="#fff"
+            d="M870.6,433.1c2.1-5.1,7.1-8.6,12.7-9.4l.5-21.6.9-.4,21.2,7c.2.6.2,1.3-.2,1.9-1.1,1.8-16.7,4.5-19,6.9v6.2c5.8.3,10.8,4.2,13.2,9.3h-29.3Z"
+          />
+          <path
+            fill="#fff"
+            d="M903.1,437.6c2.2,2.2,1.5,7.2-1.8,8.1h-32c-4.8-.8-4.1-8.6.6-9.3,9.5.7,20.6-1.1,29.8,0,.9,0,2.8.7,3.4,1.3Z"
+          />
+          <path fill="#fff" d="M899.9,449.5c-.9.9-6.2,6.1-14.6,6.1s-13.7-5.1-14.6-6.1h29.3Z" />
+        </g>
+        <g id="boje-bigisland" class="boje-icon" data-popup="popup-bigisland">
+          <rect opacity="0" x="900.4" y="624" width="38.4" height="53.3" rx="18.5" ry="18.5" />
+          <path
+            fill="#fff"
+            d="M904.6,654.8c2.1-5.1,7.1-8.6,12.7-9.4l.5-21.6.9-.4,21.2,7c.2.6.2,1.3-.2,1.9-1.1,1.8-16.7,4.5-19,6.9v6.2c5.8.3,10.8,4.2,13.2,9.3h-29.3Z"
+          />
+          <path
+            fill="#fff"
+            d="M937,659.3c2.2,2.2,1.5,7.2-1.8,8.1h-32c-4.8-.8-4.1-8.6.6-9.3,9.5.7,20.6-1.1,29.8,0,.9,0,2.8.7,3.4,1.3Z"
+          />
+          <path fill="#fff" d="M933.8,671.2c-.9.9-6.2,6.1-14.6,6.1s-13.7-5.1-14.6-6.1h29.3Z" />
+        </g>
+      </svg>
     </div>
 
     <!-- === POPUPS MIT KARUSSELL === -->
@@ -503,6 +564,7 @@
       <div class="popup-content">
         <div class="header">
           <h2>Kauai <span>48h</span></h2>
+          <button class="close-btn"></button>
         </div>
 
         <div class="body">
@@ -522,8 +584,6 @@
           <button class="arrow left">‹</button>
           <button class="arrow right">›</button>
         </div>
-
-        <button class="close-btn">×</button>
       </div>
     </div>
 
@@ -532,6 +592,7 @@
       <div class="popup-content">
         <div class="header">
           <h2>Oahu <span>48h</span></h2>
+          <button class="close-btn"></button>
         </div>
 
         <div class="body">
@@ -551,8 +612,6 @@
           <button class="arrow left">‹</button>
           <button class="arrow right">›</button>
         </div>
-
-        <button class="close-btn">×</button>
       </div>
     </div>
 
@@ -561,6 +620,7 @@
       <div class="popup-content">
         <div class="header">
           <h2>Maui <span>48h</span></h2>
+          <button class="close-btn"></button>
         </div>
 
         <div class="body">
@@ -580,8 +640,6 @@
           <button class="arrow left">‹</button>
           <button class="arrow right">›</button>
         </div>
-
-        <button class="close-btn">×</button>
       </div>
     </div>
 
@@ -590,6 +648,7 @@
       <div class="popup-content">
         <div class="header">
           <h2>Big Island <span>48h</span></h2>
+          <button class="close-btn"></button>
         </div>
 
         <div class="body">
@@ -609,8 +668,6 @@
           <button class="arrow left">‹</button>
           <button class="arrow right">›</button>
         </div>
-
-        <button class="close-btn">×</button>
       </div>
     </div>
 
@@ -620,9 +677,9 @@
 
       <!-- Datepicker -->
       <div class="chart-datepicker">
-        <label for="startDate" style="color: white; font-family: 'Khmer MN'; font-size: 1.5rem">Datum auswählen:</label>
+        <label for="startDate">Datum auswählen:</label>
         <input type="date" id="startDate" name="startDate" />
-        <button id="loadChartBtn">Laden</button>
+        <!-- <button id="loadChartBtn">Laden</button> -->
       </div>
 
       <div class="wassertemperatur-canvas">
