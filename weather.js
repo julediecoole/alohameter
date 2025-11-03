@@ -311,7 +311,7 @@ function loadIslandCharts() {
               y: {
                 ...chartOptions.scales.y,
                 min: 0,
-                max: 10,
+                max: 20,
                 title: { display: true, text: 'Wellenhöhe (m)', color: chartFrameColor }
               }
             }
