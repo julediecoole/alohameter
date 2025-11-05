@@ -11,7 +11,7 @@ body {
   color: #138987;
 }
 
-/* ===== RESPONSIVE TEXT ===== */
+/* RESPONSIVE TEXT */
 h1 {
   text-align: left;
   margin-top: 1.5rem;
@@ -142,9 +142,9 @@ button,
   transform: scale(1.1);
   filter: url('#dropshadow-hover')
 }
-  
 
-/* === POPUP === */
+
+/* POPUP */
 .popup {
   display: none;
   position: fixed;
@@ -339,7 +339,7 @@ footer {
   color: white;
 }
 
-/* === MOBILE MEDIA QUERY (optional für extra kleine Screens) === */
+/* MOBILE MEDIA QUERY (optional für extra kleine Screens) */
 @media (max-width: 400px) {
   h1 {
     font-size: clamp(2rem, 8vw, 6rem);
@@ -388,10 +388,10 @@ footer {
 
 /* Variiere Geschwindigkeit pro Ebene */
 .cloud.layer-fast {
-  animation-duration: calc(var(--cloud-speed) * 0.6); /* schneller */
+  animation-duration: calc(var(--cloud-speed) * 0.6); 
 }
 .cloud.layer-slow {
-  animation-duration: calc(var(--cloud-speed) * 1.3); /* langsamer */
+  animation-duration: calc(var(--cloud-speed) * 1.3); 
 }
 
 @keyframes moveClouds {

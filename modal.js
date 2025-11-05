@@ -13,7 +13,7 @@ closeBtn.onclick = function() {
   modal.style.display = "none";
 };
 
-// Schließen bei Klick außerhalb
+// Schließen bei Klick ausserhalb
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";

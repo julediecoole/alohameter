@@ -16,18 +16,14 @@ try {
     // PDO-Attribute für saubere Fehlerbehandlung
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
-    // ================================
+    
     // Parameter aus URL übernehmen
-    // ================================
     $bojen_id = isset($_GET['bojen_id']) ? intval($_GET['bojen_id']) : null;
     $from     = $_GET['from'] ?? null;
     $to       = $_GET['to'] ?? null;
 
-    // =====================================
     // Fallback: wenn kein Datum gesetzt
     // → Standard = letzte 7 Tage
-    // =====================================
     $today = new DateTime();
     $default_from = (clone $today)->modify('-6 days')->format('Y-m-d 00:00:00'); 
     $default_to   = $today->format('Y-m-d 23:59:59');
@@ -36,18 +32,14 @@ try {
     $from = $from ? urldecode($from) : $default_from;
     $to   = $to   ? urldecode($to)   : $default_to;
 
-    // =====================================
-    // Format prüfen (z. B. „2025-10-10 00:00:00“)
+    // Format prüfen (z.B. „2025-10-10 00:00:00“)
     // Damit keine falschen Eingaben SQL brechen
-    // =====================================
     $dateRegex = '/^\d{4}-\d{2}-\d{2}(?: \d{2}:\d{2}:\d{2})?$/';
     if (!preg_match($dateRegex, $from) || !preg_match($dateRegex, $to)) {
         throw new Exception("Ungültiges Datumsformat übergeben.");
     }
 
-    // =====================================
     // SQL-Abfrage vorbereiten
-    // =====================================
     $sql = "SELECT 
                 m.id, 
                 m.bojen_id, 
@@ -74,9 +66,7 @@ try {
 
     $sql .= " ORDER BY m.created_at ASC";
 
-    // =====================================
     // Abfrage ausführen
-    // =====================================
     $stmt = $pdo->prepare($sql);
     foreach ($params as $key => $val) {
         $stmt->bindValue($key, $val);
@@ -84,9 +74,7 @@ try {
     $stmt->execute();
     $results = $stmt->fetchAll();
 
-    // =====================================
     // JSON-Ausgabe
-    // =====================================
     echo json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
 } catch (PDOException $e) {

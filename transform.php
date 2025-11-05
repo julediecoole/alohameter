@@ -21,9 +21,7 @@
 =========================================================================== */
 
 // 1) Rohdaten von extract.php holen (Output-Buffering)
-
 $jsonData = include('extract.php');
-
 
 // 2) JSON dekodieren
 $data = json_decode($jsonData, true);
