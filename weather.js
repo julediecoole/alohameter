@@ -10,6 +10,19 @@ document.addEventListener("DOMContentLoaded", function () {
         `${data.current_weather.temperature} °C`;
       document.getElementById("wind_speed").textContent =
         `${data.current_weather.windspeed} km/h`;
+
+      // --- Cloud speed: set CSS variable based on windspeed (km/h)
+      (function setCloudSpeed(windKmh) {
+        // Mapping: higher wind → faster clouds → smaller duration (seconds)
+        // Basiswert 30s, reduziert proportional zur Windgeschwindigkeit.
+        const minSec = 6;   // schnellste possible duration
+        const maxSec = 60;  // langsamste possible duration
+        // einfache lineare Formel, anpassbar:
+        let duration = 30 - windKmh * 0.2;
+        duration = Math.max(minSec, Math.min(maxSec, duration));
+        // setze CSS variable (z. B. "--cloud-speed": "12s")
+        document.documentElement.style.setProperty('--cloud-speed', `${duration}s`);
+      })(data.current_weather.windspeed);
     })
     .catch((error) => {
       console.error("Fehler beim Laden der Wetterdaten:", error);

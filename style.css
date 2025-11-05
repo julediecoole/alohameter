@@ -77,7 +77,8 @@ button,
   background-position: center calc(100% + 1px), -240% 10%, center;
   background-repeat: no-repeat, no-repeat, repeat;
 
-  animation: moveWolken 12s linear infinite;
+  /* Dauer wird über CSS‑Variable gesteuert (gesetzt von weather.js) */
+  animation: moveWolken var(--cloud-speed) linear infinite;
 }
 
 @keyframes moveWolken {
@@ -385,5 +386,41 @@ footer {
 
   .boje-icon:hover {
     transform: scale(2.2);
+  }
+}
+
+:root {
+  /* Default, wird von JS überschrieben */
+  --cloud-speed: 20s;
+}
+
+/* Beispiel: einzelne Wolken-Elemente */
+.cloud {
+  position: absolute;
+  top: 10%;
+  left: -30%;
+  /* lineare, unendliche Bewegung von links nach rechts */
+  animation-name: moveClouds;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: var(--cloud-speed);
+  /* optional: weichere Bewegung */
+  will-change: transform;
+}
+
+/* Variiere Geschwindigkeit pro Ebene */
+.cloud.layer-fast {
+  animation-duration: calc(var(--cloud-speed) * 0.6); /* schneller */
+}
+.cloud.layer-slow {
+  animation-duration: calc(var(--cloud-speed) * 1.3); /* langsamer */
+}
+
+@keyframes moveClouds {
+  from {
+    transform: translateX(-40%);
+  }
+  to {
+    transform: translateX(140%);
   }
 }
