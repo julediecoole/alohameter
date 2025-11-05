@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // === TEIL 1: AKTUELLES WETTER ===
+  // TEIL 1: AKTUELLES WETTER 
   const weatherUrl =
     "https://api.open-meteo.com/v1/forecast?latitude=19.5481&longitude=-155.665&current_weather=true&temperature_unit=celsius&windspeed_unit=kmh&timezone=Pacific/Honolulu";
 
@@ -11,16 +11,15 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("wind_speed").textContent =
         `${data.current_weather.windspeed} km/h`;
 
-      // --- Cloud speed: set CSS variable based on windspeed (km/h)
+      // Cloud speed: set CSS variable based on windspeed (km/h)
       (function setCloudSpeed(windKmh) {
         // Mapping: higher wind → faster clouds → smaller duration (seconds)
         // Basiswert 30s, reduziert proportional zur Windgeschwindigkeit.
         const minSec = 6;   // schnellste possible duration
         const maxSec = 60;  // langsamste possible duration
-        // einfache lineare Formel, anpassbar:
         let duration = 30 - windKmh * 0.2;
         duration = Math.max(minSec, Math.min(maxSec, duration));
-        // setze CSS variable (z. B. "--cloud-speed": "12s")
+        // setze CSS variable (z.B. "cloud-speed": "12s")
         document.documentElement.style.setProperty('--cloud-speed', `${duration}s`);
       })(data.current_weather.windspeed);
     })
@@ -28,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Fehler beim Laden der Wetterdaten:", error);
     });
 
-  // === TEIL 2: POPUP ===// === Popup-Logik für alle Bojen ===
+  // TEIL 2: POPUP/ Popup-Logik für alle Bojen
 const bojen = document.querySelectorAll('.boje-icon');
 
 bojen.forEach(boje => {  
@@ -39,22 +38,22 @@ bojen.forEach(boje => {
 
   // Öffnen
   boje.addEventListener('click', () => {
-    popup.style.display = 'flex'; // Popup sichtbar machen
+    popup.style.display = 'flex'; 
   });
 
-  // Schließen via Button
+  // Schliessen via Button
   const closeBtn = popup.querySelector('.close-btn');
   closeBtn.addEventListener('click', () => {
     popup.style.display = 'none';
   });
 
-  // Schließen durch Klick außerhalb
+  // Schliessen durch Klick ausserhalb
   popup.addEventListener('click', (e) => {
     if (e.target === popup) popup.style.display = 'none';
   });
 });
 
-// === TEIL 3: KARUSSELL IN POPUPS ===
+// TEIL 3: KARUSSELL IN POPUPS 
 document.querySelectorAll('.popup').forEach(popup => {
   const slides = popup.querySelectorAll('.chart-slide');
   let currentIndex = 0;
@@ -86,13 +85,13 @@ document.querySelectorAll('.popup').forEach(popup => {
 });
 
 
-  // === TEIL 3: TEMPERATUR-CHART ===
+  // TEIL 3: TEMPERATUR-CHART 
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";
 
   // Funktion zum Laden des Charts mit optionalem Datum
   function loadChart(selectedDate = null) {
-    // === Datumslogik: letzten 5 Tage inkl. ausgewähltem oder heutigem Tag ===
-    const endDate = selectedDate ? new Date(selectedDate) : new Date(); // Ende = gewählt oder heute
+    // Datumslogik: letzten 5 Tage inkl. ausgewähltem oder heutigem Tag 
+    const endDate = selectedDate ? new Date(selectedDate) : new Date(); 
     const startDate = new Date(endDate);
     startDate.setDate(endDate.getDate() - 6); // 6 Tage zurück
 
@@ -105,7 +104,7 @@ document.querySelectorAll('.popup').forEach(popup => {
 
     console.log("Lade Daten von:", fullUrl);
 
-    // === API-Daten laden ===
+    // API-Daten laden 
     fetch(fullUrl)
       .then(response => response.json())
       .then(data => {
@@ -162,9 +161,9 @@ document.querySelectorAll('.popup').forEach(popup => {
         fill: false,
         tension: 0.5,
         spanGaps: true,
-        backgroundColor: islandColors[island] || "#FFFFFF", // Füllt das Legendensymbol
-        pointStyle: 'rect', // Quadrat, für Kreis 'circle'
-        pointRadius: 6,      // Größe der Punkte
+        backgroundColor: islandColors[island] || "#FFFFFF", 
+        pointStyle: 'rect', 
+        pointRadius: 6,      
         pointBorderColor: islandColors[island] || "#FFFFFF",
         pointBackgroundColor: islandColors[island] || "#FFFFFF"
     }));
@@ -215,10 +214,10 @@ document.querySelectorAll('.popup').forEach(popup => {
       .catch(error => console.error("Fehler beim Laden der Temperaturdaten:", error));
   }
 
-  // === Initiales Laden (heute + 6 Tage zurück)
+  // Initiales Laden (heute + 6 Tage zurück)
   loadChart();
 
-  // === Eventlistener für den Datepicker-Button
+  // Eventlistener für den Datepicker-Button
   document.getElementById('startDate').addEventListener('change', () => {
     const selectedDate = document.getElementById('startDate').value
     if (!selectedDate) {
@@ -227,7 +226,7 @@ document.querySelectorAll('.popup').forEach(popup => {
     }
     loadChart(selectedDate)
   })
-// === TEIL 4: DIAGRAMME FÜR ALLE INSELN (48h, 6-Stunden-Intervalle) ===
+// TEIL 4: DIAGRAMME FÜR ALLE INSELN (48h, 6-Stunden-Intervalle)
 function loadIslandCharts() {
   const apiUrl = "https://alohameter.melinagast.ch/unload.php";
 
@@ -242,9 +241,9 @@ function loadIslandCharts() {
     .then(data => {
       const islands = ["Kauai", "Oahu", "Maui", "Big Island"];
 
-      // === Farbdefinitionen ===
-      const chartFrameColor = "#138987"; // Türkisgrün – Rahmen, Achsen, Gridlines
-      const chartLineColor = "#E17F69";  // Rotrosa – Datenkurven
+      // Farbdefinitionen 
+      const chartFrameColor = "#138987"; // Rahmen, Achsen, Gridlines
+      const chartLineColor = "#E17F69";  // Datenkurven
 
       const chartOptions = {
         responsive: true,
@@ -297,7 +296,7 @@ function loadIslandCharts() {
         // ID sauber machen (Leerzeichen entfernen)
         const islandId = island.toLowerCase().replace(/\s/g, '');
 
-        // === Wellenhöhe ===
+        // Wellenhöhe
         const ctxH = document.getElementById(`${islandId}-wellen`).getContext("2d");
         ctxH.canvas.style.backgroundColor = "transparent";
         if (window[`${islandId}WellenhoeheChart`]) window[`${islandId}WellenhoeheChart`].destroy();
@@ -331,7 +330,7 @@ function loadIslandCharts() {
           }
         });
 
-        // === Wellenabstand ===
+        // Wellenabstand
         const ctxA = document.getElementById(`${islandId}-wellenabstand`).getContext("2d");
         ctxA.canvas.style.backgroundColor = "transparent";
         if (window[`${islandId}WellenabstandChart`]) window[`${islandId}WellenabstandChart`].destroy();
@@ -365,7 +364,7 @@ function loadIslandCharts() {
           }
         });
 
-        // === Wind ===
+        // Wind 
         const ctxW = document.getElementById(`${islandId}-wind`).getContext("2d");
         ctxW.canvas.style.backgroundColor = "transparent";
         if (window[`${islandId}WindChart`]) window[`${islandId}WindChart`].destroy();
@@ -409,10 +408,10 @@ document.querySelectorAll('.popup').forEach(popup => {
   const slides = popup.querySelectorAll('.chart-slide');
   let currentIndex = 0;
 
-  // === Titel-Element finden ===
+  // Titel-Element finden
   const titleElement = popup.querySelector('.chart-title');
 
-  // === Titel für jede Slide (Reihenfolge muss zu deinen .chart-slide-Elementen passen) ===
+  // Titel für jede Slide (Reihenfolge muss zu deinen .chart-slide-Elementen passen)
   const titles = ["Wellenhöhe (m)", "Wellenabstand (m)", "Wind (kn)"];
 
   // Erste Slide & Titel initial anzeigen
